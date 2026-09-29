@@ -1,0 +1,150 @@
+data:
+  max_joints: 150
+  dynamic_batch_max_joints: true
+  graph_attention_auto_group_max_pair_ratio: 0.8
+  image_size: 256
+  full_image_size: null
+  bbox_margin: 5
+  mmap: true
+  primary_validation_source: zoo
+  sources:
+    zoo:
+      dataset_root: /path/to/cache/zoo-rgb-cache
+      eval_ratio: 0.05
+      split_seed: 42
+      eval_stride: 81
+      inventory_mode: scan
+      verbose: false
+      weight: 0.5
+      split_file: configs/splits/video2motion/zoo.json
+      validation:
+        zoo: {}
+    mobjaverse:
+      dataset_root: /path/to/cache/mobjaverse-rgb-cache
+      inventory_mode: metadata
+      verbose: false
+      train_source_splits:
+      - train
+      weight: 0.5
+      split_file: configs/splits/video2motion/mobjaverse.json
+      validation:
+        mobj_seen:
+          source_splits:
+          - seen
+        mobj_unseen:
+          source_splits:
+          - unseen
+model:
+  params:
+    auxiliary_pose_detach_features: false
+    auxiliary_pose_head: true
+    bone_direction_head_cfg: null
+    image_backbone_cfg:
+      params:
+        include_cls_token: true
+        micro_batch_size: 324
+        compile_backbone: true
+        compile_cache_dir: /path/to/cache/cast_compile
+        repo: /absolute/path/to/dinov3
+        weights: /absolute/path/to/dinov3_weights/dinov3_vitl16_pretrain_lvd1689m-8aa4cbdd.pth
+      target: models.frozen_dinov3.FrozenDinoV3Encoder
+    decoder_cfg:
+      params:
+        decoder_layers: 8
+        decoder_rest_film: true
+        dual_global_pool: 2
+        dual_local_window: 4
+        external_query_dim: 768
+        num_heads: 8
+        predict_residual_rotation: true
+        q_dim: 256
+        rest_layers: 6
+        rotation_representation: rot6d
+        temporal_dropout: 0.05
+        temporal_mode: global
+        temporal_window: null
+        use_grad_checkpoint: true
+      target: models.decoder.model.Decoder
+    grace_cfg: null
+    rotation_query_source: video_features
+    encoder_cfg:
+      params:
+        concat_last_stage_features: true
+        dropout: 0.05
+        dual_global_pool: 2
+        dual_local_window: 4
+        img_dim: 1024
+        num_heads: 8
+        num_joints: 150
+        num_layers: 8
+        output_mode: features
+        q_dim: 256
+        ref_layers: 6
+        temporal_mode: global
+        temporal_window: null
+        use_checkpoint: true
+        use_graph_ref_inner: true
+        use_graph_temporal_inner: true
+      target: models.encoder.model.Encoder
+  target: models.base_model.model.BaseModel
+runtime:
+  device: cuda
+  seed: 42
+train:
+  gradient_diagnostics: false
+  prefetch_batches: true
+  prefetch_depth: 1
+  amp_dtype: bfloat16
+  batch_size: 64
+  grad_clip_norm: 1.0
+  gradient_accumulation_steps: 1
+  max_train_steps: 6000
+  num_workers: 8
+  persistent_workers: true
+  prefetch_factor: 1
+  seq_len: 81
+  lr: 0.0003
+  weight_decay: 0.0
+  lr_decay_steps: 6000
+  lr_warmup_ratio: 0.05
+  min_lr: 3.0e-06
+  bone_direction_dynamic_threshold_deg: 1.0
+  rotation_loss_type: geodesic
+  rotation_motion_weighted: true
+  weight:
+    fk_position: 6.0
+    pose_position: 6.0
+    pose_velocity: 80.0
+    root_rotation: 0.1
+    rotation: 1.0
+    rotation_velocity: 5.0
+  eval_save_every_steps: 1000
+  max_ckpt: 5
+  pin_memory: true
+  pin_memory_chunk_mb: 64
+  skeleton_normalize: true
+  skeleton_normalize_smooth_l1_beta: 0.075
+  init_from_checkpoint: null
+eval:
+  aggregation: per_motion
+  batch_size: 128
+  num_workers: 8
+  persistent_workers: false
+  prefetch_factor: 1
+  visualization:
+    enabled: false
+    every_eval: false
+    fps: 30.0
+    sample_seed: 42
+  window: 81
+  pin_memory: true
+  pin_memory_chunk_mb: 64
+  selection_weights:
+    zoo: 0.5
+    mobj_seen: 0.25
+    mobj_unseen: 0.25
+output:
+  checkpoint_root: /path/to/checkpoints
+name: Zoo + MObjaverse joint
+experiment:
+  exp: CAST_B_dinov3_no_grace

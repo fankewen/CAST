@@ -1,0 +1,28 @@
+{
+  "rejected_asset_count": 23,
+  "rejections": [
+    {"asset_id": "000313"},
+    {"asset_id": "002021"},
+    {"asset_id": "002641"},
+    {"asset_id": "002727"},
+    {"asset_id": "003221"},
+    {"asset_id": "005389"},
+    {"asset_id": "005475"},
+    {"asset_id": "006850"},
+    {"asset_id": "007145"},
+    {"asset_id": "009056"},
+    {"asset_id": "009649"},
+    {"asset_id": "010793"},
+    {"asset_id": "012773"},
+    {"asset_id": "013614"},
+    {"asset_id": "013860"},
+    {"asset_id": "014083"},
+    {"asset_id": "014316"},
+    {"asset_id": "014451"},
+    {"asset_id": "015043"},
+    {"asset_id": "015072"},
+    {"asset_id": "015146"},
+    {"asset_id": "015832"},
+    {"asset_id": "016197"}
+  ]
+}

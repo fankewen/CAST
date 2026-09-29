@@ -1,0 +1,1934 @@
+{
+  "_meta": {
+    "format": "zoo_animation_split_v1",
+    "split_unit": "clip_name",
+    "split_seed": 42,
+    "eval_ratio": 0.05
+  },
+  "Alligator": {
+    "train": [
+      "Alligator_AlligatorALL-BigMouth",
+      "Alligator_AlligatorALL-Bite1",
+      "Alligator_AlligatorALL-Bite2",
+      "Alligator_AlligatorALL-Bite3",
+      "Alligator_AlligatorALL-Bite4",
+      "Alligator_AlligatorALL-Bite5",
+      "Alligator_AlligatorALL-Bite6",
+      "Alligator_AlligatorALL-Bite7",
+      "Alligator_AlligatorALL-Catch",
+      "Alligator_AlligatorALL-DIe",
+      "Alligator_AlligatorALL-Dash",
+      "Alligator_AlligatorALL-Dash2",
+      "Alligator_AlligatorALL-DeadUp",
+      "Alligator_AlligatorALL-DieLoop",
+      "Alligator_AlligatorALL-Shake",
+      "Alligator_AlligatorALL-StandIdle",
+      "Alligator_AlligatorALL-Throw2",
+      "Alligator_AlligatorALL-Walk1",
+      "Alligator_AlligatorALL-Walk2",
+      "Alligator_AlligatorALL-Walk3"
+    ],
+    "val": [
+      "Alligator_AlligatorALL-Throw"
+    ]
+  },
+  "Anaconda": {
+    "train": [
+      "Anaconda_AnacondaALL-Attack",
+      "Anaconda_AnacondaALL-Bite",
+      "Anaconda_AnacondaALL-Bite2",
+      "Anaconda_AnacondaALL-Die",
+      "Anaconda_AnacondaALL-Hiss",
+      "Anaconda_AnacondaALL-Idle",
+      "Anaconda_AnacondaALL-Idle2",
+      "Anaconda_AnacondaALL-Rise",
+      "Anaconda_AnacondaALL-Rise2",
+      "Anaconda_AnacondaALL-Run",
+      "Anaconda_AnacondaALL-Sneaky",
+      "Anaconda_AnacondaALL-Spin",
+      "Anaconda_AnacondaALL-Strike",
+      "Anaconda_AnacondaALL-Strike2",
+      "Anaconda_AnacondaALL-StruckDie",
+      "Anaconda_AnacondaALL-Tired",
+      "Anaconda_AnacondaALL-WalkSLow"
+    ],
+    "val": [
+      "Anaconda_AnacondaALL-Twistrattle"
+    ]
+  },
+  "Ant": {
+    "train": [
+      "Ant_Ant-Attack",
+      "Ant_Ant-Cleaning",
+      "Ant_Ant-Die",
+      "Ant_Ant-Die2",
+      "Ant_Ant-DieLoop",
+      "Ant_Ant-DieUp",
+      "Ant_Ant-Idle",
+      "Ant_Ant-Idle2",
+      "Ant_Ant-Idle3",
+      "Ant_Ant-JumpForward",
+      "Ant_Ant-KnockedBack",
+      "Ant_Ant-March",
+      "Ant_Ant-Sting",
+      "Ant_Ant-Sting2",
+      "Ant_Ant-Throw",
+      "Ant_Ant-Walk"
+    ],
+    "val": [
+      "Ant_Ant-Shake"
+    ]
+  },
+  "Bat": {
+    "train": [
+      "Bat_Bat-AttackBite",
+      "Bat_Bat-Float",
+      "Bat_Bat-Fly",
+      "Bat_Bat-FlyGlide",
+      "Bat_Bat-FlyLoop",
+      "Bat_Bat-KnockedBack",
+      "Bat_Bat-Looking",
+      "Bat_Bat-SlowFly",
+      "Bat_Bat-Walk"
+    ],
+    "val": [
+      "Bat_Bat-Kick"
+    ]
+  },
+  "Bear": {
+    "train": [
+      "Bear_BEAR-AngerySwat",
+      "Bear_BEAR-BackUp",
+      "Bear_BEAR-BearRun",
+      "Bear_BEAR-Bite",
+      "Bear_BEAR-CatchFish",
+      "Bear_BEAR-Feast",
+      "Bear_BEAR-FishBite",
+      "Bear_BEAR-GroundPaw",
+      "Bear_BEAR-Growl",
+      "Bear_BEAR-Idle",
+      "Bear_BEAR-IdlePant",
+      "Bear_BEAR-JumpBite",
+      "Bear_BEAR-LayDown",
+      "Bear_BEAR-RiseRoar",
+      "Bear_BEAR-RunningBear",
+      "Bear_BEAR-SlowWalk",
+      "Bear_BEAR-Stalking",
+      "Bear_BEAR-Stand",
+      "Bear_BEAR-SwatLeft",
+      "Bear_BEAR-SwatRight",
+      "Bear_BEAR-TipLeft",
+      "Bear_BEAR-Trot",
+      "Bear_BEAR-Trotting",
+      "Bear_BEAR-Turn180",
+      "Bear_BEAR-TurnLeft",
+      "Bear_BEAR-WakeUp",
+      "Bear_BEAR-WalkForward",
+      "Bear_BEAR-WetShake"
+    ],
+    "val": [
+      "Bear_BEAR-GetUp"
+    ]
+  },
+  "Bird__skeleton_01": {
+    "train": [
+      "Bird_BIRD-Floater",
+      "Bird_BIRD-Flying",
+      "Bird_BIRD-Attack3",
+      "Bird_BIRD-Fallen",
+      "Bird_BIRD-CircleLand",
+      "Bird_BIRD-Attack",
+      "Bird_BIRDALL",
+      "Bird_BIRD-FlySlow",
+      "Bird_BIRD-Falling",
+      "Bird_BIRD-Attack4",
+      "Bird_BIRD-FlyLoop",
+      "Bird_BIRD-SlowLook",
+      "Bird_BIRD-GroundFlap",
+      "Bird_BIRD-Attack2",
+      "Bird_BIRD-LookRight",
+      "Bird_BIRD-Lander",
+      "Bird_BIRD-IdleLoop",
+      "Bird_BIRD-FlyFast"
+    ],
+    "val": [
+      "Bird_BIRD-TakeOff"
+    ]
+  },
+  "Bird__skeleton_02": {
+    "train": [
+      "Bird_Seagull_B01"
+    ],
+    "val": [
+      "Bird_Seagull"
+    ]
+  },
+  "Bird__skeleton_03": {
+    "train": [
+      "Bird_CarrionC_A02"
+    ],
+    "val": [
+      "Bird_Carrion"
+    ]
+  },
+  "BrownBear": {
+    "train": [
+      "BrownBear_BEAR-Attack",
+      "BrownBear_BEAR-Attack2",
+      "BrownBear_BEAR-Attack3",
+      "BrownBear_BEAR-Charge",
+      "BrownBear_BEAR-DeathLoop",
+      "BrownBear_BEAR-EatFish",
+      "BrownBear_BEAR-Falling",
+      "BrownBear_BEAR-Idle",
+      "BrownBear_BEAR-Limp",
+      "BrownBear_BEAR-Limping",
+      "BrownBear_BEAR-Ready",
+      "BrownBear_BEAR-Rise",
+      "BrownBear_BEAR-RiseAttack",
+      "BrownBear_BEAR-RiseSwat",
+      "BrownBear_BEAR-RunLoop",
+      "BrownBear_BEAR-ScratchEar",
+      "BrownBear_BEAR-Sleepy",
+      "BrownBear_BEAR-SlowWalk",
+      "BrownBear_BEAR-Twitching",
+      "BrownBear_BEAR-WalkLoop"
+    ],
+    "val": [
+      "BrownBear_BEAR-SitClean"
+    ]
+  },
+  "Buffalo__skeleton_01": {
+    "train": [
+      "Buffalo_Buffalo_C01"
+    ],
+    "val": [
+      "Buffalo_Buffalo_B01"
+    ]
+  },
+  "Buffalo__skeleton_02": {
+    "train": [
+      "Buffalo_Buffalo-AlertIdle",
+      "Buffalo_Buffalo-AngryAntlers",
+      "Buffalo_Buffalo-Attack",
+      "Buffalo_Buffalo-Attack1",
+      "Buffalo_Buffalo-ChargedUp",
+      "Buffalo_Buffalo-Cud",
+      "Buffalo_Buffalo-Die",
+      "Buffalo_Buffalo-Fall",
+      "Buffalo_Buffalo-GetUp",
+      "Buffalo_Buffalo-GroundLoop",
+      "Buffalo_Buffalo-HoofScrape",
+      "Buffalo_Buffalo-Idle",
+      "Buffalo_Buffalo-Jump",
+      "Buffalo_Buffalo-LoweredHead",
+      "Buffalo_Buffalo-Shot",
+      "Buffalo_Buffalo-SleepUp",
+      "Buffalo_Buffalo-WalkLoop",
+      "Buffalo_BuffaloALL"
+    ],
+    "val": [
+      "Buffalo_Buffalo-RunLoop"
+    ]
+  },
+  "Buzzard": {
+    "train": [
+      "Buzzard_BUZZARD-Attack1",
+      "Buzzard_BUZZARD-Attack2",
+      "Buzzard_BUZZARD-Attack3",
+      "Buzzard_BUZZARD-Die1",
+      "Buzzard_BUZZARD-Dying",
+      "Buzzard_BUZZARD-SlowFly",
+      "Buzzard_BUZZARD-SlowLoop",
+      "Buzzard_BUZZARD-SlowtoLand",
+      "Buzzard_BUZZARD-Soaring"
+    ],
+    "val": [
+      "Buzzard_BUZZARD-FlyLoop"
+    ]
+  },
+  "Camel": {
+    "train": [
+      "Camel_Camel-Bite",
+      "Camel_Camel-Buck",
+      "Camel_Camel-DownLoop",
+      "Camel_Camel-Fall",
+      "Camel_Camel-IdleLoop",
+      "Camel_Camel-LayDown",
+      "Camel_Camel-Mope",
+      "Camel_Camel-Restless",
+      "Camel_Camel-Run",
+      "Camel_Camel-RunFast",
+      "Camel_Camel-ScrapeHoof",
+      "Camel_Camel-SlowWalk",
+      "Camel_Camel-Specail",
+      "Camel_Camel-StandUp",
+      "Camel_Camel-StopWalk",
+      "Camel_Camel-Trot",
+      "Camel_Camel-Yell"
+    ],
+    "val": [
+      "Camel_Camel-Wild1"
+    ]
+  },
+  "Cat": {
+    "train": [
+      "Cat_Cat-IdlePurr",
+      "Cat_Cat-LickCleanIdle",
+      "Cat_Cat-StretchYawnIdle"
+    ],
+    "val": [
+      "Cat_Cat-Walk"
+    ]
+  },
+  "Centipede": {
+    "train": [
+      "Centipede_Centipede-Attack",
+      "Centipede_Centipede-Attack1",
+      "Centipede_Centipede-Attack2",
+      "Centipede_Centipede-Die",
+      "Centipede_Centipede-Idle",
+      "Centipede_Centipede-Idle3",
+      "Centipede_Centipede-Rearing",
+      "Centipede_Centipede-Run",
+      "Centipede_Centipede-Walk"
+    ],
+    "val": [
+      "Centipede_Centipede-Idle2"
+    ]
+  },
+  "Chicken": {
+    "train": [
+      "Chicken_Chicken-EggLaying",
+      "Chicken_Chicken-IdlePecking"
+    ],
+    "val": [
+      "Chicken_Chicken-Walk"
+    ]
+  },
+  "Comodoa": {
+    "train": [
+      "Comodoa_ComodoaALL-Attack1",
+      "Comodoa_ComodoaALL-Attack2",
+      "Comodoa_ComodoaALL-Attack3",
+      "Comodoa_ComodoaALL-Idle",
+      "Comodoa_ComodoaALL-Idle2",
+      "Comodoa_ComodoaALL-Run",
+      "Comodoa_ComodoaALL-Walk",
+      "Comodoa_ComodoaALL-Yawn"
+    ],
+    "val": [
+      "Comodoa_ComodoaALL-Die"
+    ]
+  },
+  "Coyote": {
+    "train": [
+      "Coyote_Coyote-Attack1",
+      "Coyote_Coyote-Attack2",
+      "Coyote_Coyote-Attack3",
+      "Coyote_Coyote-Die",
+      "Coyote_Coyote-Howling",
+      "Coyote_Coyote-Idle",
+      "Coyote_Coyote-Running",
+      "Coyote_Coyote-Sniffing",
+      "Coyote_Coyote-Walking",
+      "Coyote_CoyoteALL"
+    ],
+    "val": [
+      "Coyote_Coyote-Restless"
+    ]
+  },
+  "Crab": {
+    "train": [
+      "Crab_Crab-Attack1",
+      "Crab_Crab-Attack2",
+      "Crab_Crab-Attack3",
+      "Crab_Crab-Attack4",
+      "Crab_Crab-Defeated",
+      "Crab_Crab-Eat",
+      "Crab_Crab-HitBack",
+      "Crab_Crab-Strafe",
+      "Crab_Crab-Walk"
+    ],
+    "val": [
+      "Crab_Crab-Die"
+    ]
+  },
+  "Cricket": {
+    "train": [
+      "Cricket_Cricket-Attack2",
+      "Cricket_Cricket-Attack3",
+      "Cricket_Cricket-Attack4",
+      "Cricket_Cricket-Burrough",
+      "Cricket_Cricket-Die",
+      "Cricket_Cricket-Idle",
+      "Cricket_Cricket-IdlePissed",
+      "Cricket_Cricket-LookAround",
+      "Cricket_Cricket-OutOfGround",
+      "Cricket_Cricket-Running",
+      "Cricket_Cricket-Walking",
+      "Cricket_CricketALL"
+    ],
+    "val": [
+      "Cricket_Cricket-Attack1"
+    ]
+  },
+  "Crocodile": {
+    "train": [
+      "Crocodile_Crocodile-Bite",
+      "Crocodile_Crocodile-Bounce",
+      "Crocodile_Crocodile-Die",
+      "Crocodile_Crocodile-GetUp",
+      "Crocodile_Crocodile-HeavyBreathe",
+      "Crocodile_Crocodile-Idle",
+      "Crocodile_Crocodile-NormalBreath",
+      "Crocodile_Crocodile-Running",
+      "Crocodile_Crocodile-SleepLoop",
+      "Crocodile_Crocodile-TailWhip",
+      "Crocodile_Crocodile-Yawning"
+    ],
+    "val": [
+      "Crocodile_Crocodile-Attack"
+    ]
+  },
+  "Crow": {
+    "train": [
+      "Crow_CrowALL-Ascend",
+      "Crow_CrowALL-Attack",
+      "Crow_CrowALL-Attack2",
+      "Crow_CrowALL-FlyStart",
+      "Crow_CrowALL-Glide",
+      "Crow_CrowALL-IdleFlap",
+      "Crow_CrowALL-Landflap",
+      "Crow_CrowALL-PeckEat",
+      "Crow_CrowALL-TakeOff"
+    ],
+    "val": [
+      "Crow_CrowALL-Idle"
+    ]
+  },
+  "Deer": {
+    "train": [
+      "Deer_DEER-Backing",
+      "Deer_DEER-Bleat",
+      "Deer_DEER-BuckShy",
+      "Deer_DEER-Charge",
+      "Deer_DEER-ComeDown",
+      "Deer_DEER-Gallop",
+      "Deer_DEER-GetUp",
+      "Deer_DEER-GetUpAgain",
+      "Deer_DEER-Grazing",
+      "Deer_DEER-Idle",
+      "Deer_DEER-RearUp",
+      "Deer_DEER-Rutting",
+      "Deer_DEER-Squirly",
+      "Deer_DEER-TakeOff",
+      "Deer_DEER-Trot",
+      "Deer_DEER-WalkBack",
+      "Deer_DEER-WalkCall",
+      "Deer_DEER-WalkForward",
+      "Deer_DEER-idleEarFlik"
+    ],
+    "val": [
+      "Deer_DEER-TurnLeft"
+    ]
+  },
+  "Dog": {
+    "train": [
+      "Dog_Dog-Attack",
+      "Dog_Dog-Back_Away",
+      "Dog_Dog-Bark_Jump",
+      "Dog_Dog-Barking",
+      "Dog_Dog-Bite_Arm",
+      "Dog_Dog-Floor_Rise_Left",
+      "Dog_Dog-Floor_Rise_Right",
+      "Dog_Dog-Frightened",
+      "Dog_Dog-Galloping",
+      "Dog_Dog-Grab",
+      "Dog_Dog-Hit_Left",
+      "Dog_Dog-Hit_Right",
+      "Dog_Dog-Idle",
+      "Dog_Dog-Investigate_Loop",
+      "Dog_Dog-Leash_Attack",
+      "Dog_Dog-Leash_Hot",
+      "Dog_Dog-Limp_Loop",
+      "Dog_Dog-Look_Left",
+      "Dog_Dog-PAnting",
+      "Dog_Dog-Paddle",
+      "Dog_Dog-Rise",
+      "Dog_Dog-Run_Frisbee",
+      "Dog_Dog-Running",
+      "Dog_Dog-SNiffed",
+      "Dog_Dog-Scratch_Right",
+      "Dog_Dog-Single_bark",
+      "Dog_Dog-Sit",
+      "Dog_Dog-Stare",
+      "Dog_Dog-Swim_Fast",
+      "Dog_Dog-Swim_Right",
+      "Dog_Dog-Turn_Left",
+      "Dog_Dog-Turn_Right",
+      "Dog_Dog-Wag",
+      "Dog_Dog-Walk",
+      "Dog_Dog-Walk_Backwards_Loop",
+      "Dog_Dog-Walk_Loop",
+      "Dog_Dog-Wine",
+      "Dog_Dog-Woof",
+      "Dog_Dog-retreat",
+      "Dog_Dog-swim",
+      "Dog_Dog-swim_left"
+    ],
+    "val": [
+      "Dog_Dog-Look_Right",
+      "Dog_Dog-Snarling"
+    ]
+  },
+  "Dog-2": {
+    "train": [
+      "Dog-2_DOG-ArmBite",
+      "Dog-2_DOG-Attack",
+      "Dog-2_DOG-BackOff",
+      "Dog-2_DOG-Bark",
+      "Dog-2_DOG-Bark2",
+      "Dog-2_DOG-BiteArmShake",
+      "Dog-2_DOG-BiteJump",
+      "Dog-2_DOG-GetUp",
+      "Dog-2_DOG-Growl",
+      "Dog-2_DOG-IdleBreathe",
+      "Dog-2_DOG-Leashjump",
+      "Dog-2_DOG-LookLeft",
+      "Dog-2_DOG-LookRight",
+      "Dog-2_DOG-Paddle",
+      "Dog-2_DOG-Ready",
+      "Dog-2_DOG-RunFast",
+      "Dog-2_DOG-Scratch",
+      "Dog-2_DOG-Sense",
+      "Dog-2_DOG-Shake",
+      "Dog-2_DOG-Sit",
+      "Dog-2_DOG-Slowtail",
+      "Dog-2_DOG-Sniffing",
+      "Dog-2_DOG-Swim",
+      "Dog-2_DOG-SwimIdle",
+      "Dog-2_DOG-Swimturn",
+      "Dog-2_DOG-TurnLeft",
+      "Dog-2_DOG-TurnRight",
+      "Dog-2_DOG-Wag",
+      "Dog-2_DOG-WalkLimp",
+      "Dog-2_DOG-WalkLoop",
+      "Dog-2_DOG-WalkNormal",
+      "Dog-2_DOG-Walkbackward",
+      "Dog-2_DOG-Woof"
+    ],
+    "val": [
+      "Dog-2_DOG-RunJump",
+      "Dog-2_DOG-SwimTurn2"
+    ]
+  },
+  "Dragon": {
+    "train": [
+      "Dragon_Wyvern-Attack",
+      "Dragon_Wyvern-Attack2",
+      "Dragon_Wyvern-Attack3",
+      "Dragon_Wyvern-Die",
+      "Dragon_Wyvern-Fly",
+      "Dragon_Wyvern-Idle2",
+      "Dragon_Wyvern-Idle3",
+      "Dragon_Wyvern-SlowFly",
+      "Dragon_WyvernALL"
+    ],
+    "val": [
+      "Dragon_Wyvern-Idle"
+    ]
+  },
+  "Eagle__skeleton_01": {
+    "train": [
+      "Eagle_Eagle-FloatDown",
+      "Eagle_Eagle-FloattUp",
+      "Eagle_Eagle-FlyLoop",
+      "Eagle_Eagle-GlideLoop",
+      "Eagle_Eagle-IdleNest",
+      "Eagle_Eagle-Landing",
+      "Eagle_Eagle-RideWind",
+      "Eagle_Eagle-Shot",
+      "Eagle_Eagle-Strike1",
+      "Eagle_Eagle-Strike2",
+      "Eagle_Eagle-TakeOff"
+    ],
+    "val": [
+      "Eagle_Eagle-EggSteal"
+    ]
+  },
+  "Eagle__skeleton_02": {
+    "train": [
+      "Eagle_Eagle_A02"
+    ],
+    "val": []
+  },
+  "Elephant__skeleton_01": {
+    "train": [
+      "Elephant_ElephantALL"
+    ],
+    "val": []
+  },
+  "Elephant__skeleton_02": {
+    "train": [
+      "Elephant_down_out"
+    ],
+    "val": []
+  },
+  "Elephant__skeleton_03": {
+    "train": [
+      "Elephant_down_loop"
+    ],
+    "val": []
+  },
+  "Elephant__skeleton_04": {
+    "train": [
+      "Elephant_idle_1"
+    ],
+    "val": []
+  },
+  "Elephant__skeleton_05": {
+    "train": [
+      "Elephant_idle_2"
+    ],
+    "val": []
+  },
+  "Elephant__skeleton_06": {
+    "train": [
+      "Elephant_run"
+    ],
+    "val": []
+  },
+  "Elephant__skeleton_07": {
+    "train": [
+      "Elephant_atk_2"
+    ],
+    "val": []
+  },
+  "Elephant__skeleton_08": {
+    "train": [
+      "Elephant_die"
+    ],
+    "val": []
+  },
+  "Elephant__skeleton_09": {
+    "train": [
+      "Elephant_firing"
+    ],
+    "val": [
+      "Elephant_atk_1"
+    ]
+  },
+  "Elephant__skeleton_10": {
+    "train": [
+      "Elephant_walk"
+    ],
+    "val": []
+  },
+  "Elephant__skeleton_11": {
+    "train": [
+      "Elephant_idle_3"
+    ],
+    "val": []
+  },
+  "Elephant__skeleton_12": {
+    "train": [
+      "Elephant_down_in"
+    ],
+    "val": []
+  },
+  "Elephant__skeleton_13": {
+    "train": [
+      "Elephant_passout"
+    ],
+    "val": []
+  },
+  "FireAnt": {
+    "train": [
+      "FireAnt_Fire_ant-Angry",
+      "FireAnt_Fire_ant-Annoyed",
+      "FireAnt_Fire_ant-BackUp",
+      "FireAnt_Fire_ant-Bite",
+      "FireAnt_Fire_ant-Creep",
+      "FireAnt_Fire_ant-Feel",
+      "FireAnt_Fire_ant-FightOff",
+      "FireAnt_Fire_ant-ForwardMarch",
+      "FireAnt_Fire_ant-Gesture",
+      "FireAnt_Fire_ant-Hit",
+      "FireAnt_Fire_ant-Hungry",
+      "FireAnt_Fire_ant-Idle",
+      "FireAnt_Fire_ant-Jump",
+      "FireAnt_Fire_ant-Left",
+      "FireAnt_Fire_ant-Right",
+      "FireAnt_Fire_ant-Rip",
+      "FireAnt_Fire_ant-RipFlesh2",
+      "FireAnt_Fire_ant-Roar",
+      "FireAnt_Fire_ant-Snap",
+      "FireAnt_Fire_ant-TurnLeft",
+      "FireAnt_Fire_ant-TurnRight",
+      "FireAnt_Fire_ant-UpFromDown",
+      "FireAnt_Fire_ant-UpFromDown2"
+    ],
+    "val": [
+      "FireAnt_Fire_ant-RipFlesh"
+    ]
+  },
+  "Flamingo": {
+    "train": [
+      "Flamingo_Flamingo-BendIdle",
+      "Flamingo_Flamingo-OneLEgBEnt",
+      "Flamingo_Flamingo-Sleep"
+    ],
+    "val": [
+      "Flamingo_Flamingo-Walk"
+    ]
+  },
+  "Fox__skeleton_01": {
+    "train": [
+      "Fox_FoxA_A03"
+    ],
+    "val": []
+  },
+  "Fox__skeleton_02": {
+    "train": [
+      "Fox_FoxA_A02"
+    ],
+    "val": []
+  },
+  "Fox__skeleton_03": {
+    "train": [
+      "Fox_idle_4"
+    ],
+    "val": []
+  },
+  "Fox__skeleton_04": {
+    "train": [
+      "Fox_FOXALL"
+    ],
+    "val": []
+  },
+  "Fox__skeleton_05": {
+    "train": [
+      "Fox_atk_1"
+    ],
+    "val": []
+  },
+  "Fox__skeleton_06": {
+    "train": [
+      "Fox_idle_3"
+    ],
+    "val": []
+  },
+  "Fox__skeleton_07": {
+    "train": [
+      "Fox_walk"
+    ],
+    "val": []
+  },
+  "Fox__skeleton_08": {
+    "train": [
+      "Fox_run"
+    ],
+    "val": []
+  },
+  "Fox__skeleton_09": {
+    "train": [
+      "Fox_die",
+      "Fox_atk_3",
+      "Fox_atk_2"
+    ],
+    "val": [
+      "Fox_die2"
+    ]
+  },
+  "Fox__skeleton_10": {
+    "train": [
+      "Fox_idle_1"
+    ],
+    "val": []
+  },
+  "Fox__skeleton_11": {
+    "train": [
+      "Fox_idle_2"
+    ],
+    "val": []
+  },
+  "Fox__skeleton_12": {
+    "train": [
+      "Fox_atk_4"
+    ],
+    "val": []
+  },
+  "Fox__skeleton_13": {
+    "train": [
+      "Fox_idle_5"
+    ],
+    "val": []
+  },
+  "Gazelle__skeleton_01": {
+    "train": [
+      "Gazelle_walk"
+    ],
+    "val": []
+  },
+  "Gazelle__skeleton_02": {
+    "train": [
+      "Gazelle_idle_3"
+    ],
+    "val": []
+  },
+  "Gazelle__skeleton_03": {
+    "train": [
+      "Gazelle_Gazelle-Alert",
+      "Gazelle_Gazelle-Attack",
+      "Gazelle_Gazelle-Attack1",
+      "Gazelle_Gazelle-Fall",
+      "Gazelle_Gazelle-HeadPoke",
+      "Gazelle_Gazelle-IdleReady",
+      "Gazelle_Gazelle-Run",
+      "Gazelle_Gazelle-Walk",
+      "Gazelle_GazelleALL"
+    ],
+    "val": [
+      "Gazelle_Gazelle-Idle"
+    ]
+  },
+  "Gazelle__skeleton_04": {
+    "train": [
+      "Gazelle_idle_1"
+    ],
+    "val": []
+  },
+  "Gazelle__skeleton_05": {
+    "train": [
+      "Gazelle_idle_2"
+    ],
+    "val": []
+  },
+  "Gazelle__skeleton_06": {
+    "train": [
+      "Gazelle_atk_3",
+      "Gazelle_atk_1",
+      "Gazelle_atk_2"
+    ],
+    "val": [
+      "Gazelle_die"
+    ]
+  },
+  "Gazelle__skeleton_07": {
+    "train": [
+      "Gazelle_run"
+    ],
+    "val": []
+  },
+  "Giantbee": {
+    "train": [
+      "Giantbee_Giantbee-Attack",
+      "Giantbee_Giantbee-Attack2",
+      "Giantbee_Giantbee-Attack3",
+      "Giantbee_Giantbee-Attack4",
+      "Giantbee_Giantbee-Die",
+      "Giantbee_Giantbee-Die2",
+      "Giantbee_Giantbee-Idle",
+      "Giantbee_Giantbee-Idle2",
+      "Giantbee_GiantbeeALL",
+      "Giantbee_Giantbee_B"
+    ],
+    "val": [
+      "Giantbee_Giantbee-Fly"
+    ]
+  },
+  "Goat": {
+    "train": [
+      "Goat_Goat-Attack",
+      "Goat_Goat-Bleat",
+      "Goat_Goat-Die",
+      "Goat_Goat-HeadButt",
+      "Goat_Goat-HeadButt2",
+      "Goat_Goat-Idle",
+      "Goat_Goat-JumpKnock",
+      "Goat_Goat-Run",
+      "Goat_Goat-Walk"
+    ],
+    "val": [
+      "Goat_Goat-HoofScrape"
+    ]
+  },
+  "Hamster": {
+    "train": [
+      "Hamster_Hamster-Idle",
+      "Hamster_Hamster-RollAttack",
+      "Hamster_Hamster-Run",
+      "Hamster_Hamster-Sniff"
+    ],
+    "val": [
+      "Hamster_Hamster-Walk"
+    ]
+  },
+  "HermitCrab": {
+    "train": [
+      "HermitCrab_CrabAll-Eat",
+      "HermitCrab_CrabAll-Expire",
+      "HermitCrab_CrabAll-Fighting",
+      "HermitCrab_CrabAll-KnockedBack",
+      "HermitCrab_CrabAll-KnockedOut",
+      "HermitCrab_CrabAll-OutofGround",
+      "HermitCrab_CrabAll-Pinchers",
+      "HermitCrab_CrabAll-SandBurrough",
+      "HermitCrab_CrabAll-Sleep",
+      "HermitCrab_CrabAll-Slowwalk",
+      "HermitCrab_CrabAll-Take_001",
+      "HermitCrab_CrabAll-Walk"
+    ],
+    "val": [
+      "HermitCrab_CrabAll-Die"
+    ]
+  },
+  "Hippopotamus": {
+    "train": [
+      "Hippopotamus_Hippopotamus-Attack",
+      "Hippopotamus_Hippopotamus-Attack2",
+      "Hippopotamus_Hippopotamus-Attack3",
+      "Hippopotamus_Hippopotamus-Attack4",
+      "Hippopotamus_Hippopotamus-Die",
+      "Hippopotamus_Hippopotamus-Idle",
+      "Hippopotamus_Hippopotamus-Run",
+      "Hippopotamus_Hippopotamus-Walk",
+      "Hippopotamus_Hippopotamus-Yawn",
+      "Hippopotamus_HippopotamusAll"
+    ],
+    "val": [
+      "Hippopotamus_Hippopotamus-Idle2"
+    ]
+  },
+  "Horse__skeleton_01": {
+    "train": [
+      "Horse_HorseALL-Attack",
+      "Horse_HorseALL-BackUp",
+      "Horse_HorseALL-Bucking",
+      "Horse_HorseALL-Dying",
+      "Horse_HorseALL-FeetUp",
+      "Horse_HorseALL-GetUp",
+      "Horse_HorseALL-HoofScrape",
+      "Horse_HorseALL-Idle",
+      "Horse_HorseALL-Idle3",
+      "Horse_HorseALL-IdleEars",
+      "Horse_HorseALL-InAir",
+      "Horse_HorseALL-JumpLand",
+      "Horse_HorseALL-Jumping",
+      "Horse_HorseALL-KnockedBack",
+      "Horse_HorseALL-LandRun",
+      "Horse_HorseALL-LoneRanger",
+      "Horse_HorseALL-Lying",
+      "Horse_HorseALL-Rearing",
+      "Horse_HorseALL-Rearing2",
+      "Horse_HorseALL-Restless",
+      "Horse_HorseALL-Restless2",
+      "Horse_HorseALL-Restless3",
+      "Horse_HorseALL-RunJump",
+      "Horse_HorseALL-RunLoop",
+      "Horse_HorseALL-RunToStop",
+      "Horse_HorseALL-SlowIdle",
+      "Horse_HorseALL-SlowWalk"
+    ],
+    "val": [
+      "Horse_HorseALL-HoofScrape2"
+    ]
+  },
+  "Horse__skeleton_02": {
+    "train": [
+      "Horse_Horse_NoSaddle"
+    ],
+    "val": []
+  },
+  "Hound": {
+    "train": [
+      "Hound_Hound-Bark1",
+      "Hound_Hound-Barking",
+      "Hound_Hound-Die",
+      "Hound_Hound-DieLoop",
+      "Hound_Hound-GetUp",
+      "Hound_Hound-Hit",
+      "Hound_Hound-Idle",
+      "Hound_Hound-Ready2",
+      "Hound_Hound-Restless",
+      "Hound_Hound-RunLoop",
+      "Hound_Hound-Sniff",
+      "Hound_Hound-WalkLoop"
+    ],
+    "val": [
+      "Hound_Hound-Attack"
+    ]
+  },
+  "Isopetra__skeleton_01": {
+    "train": [
+      "Isopetra_Isopetra-Attack",
+      "Isopetra_Isopetra-Attack2",
+      "Isopetra_Isopetra-Attack3",
+      "Isopetra_Isopetra-Die",
+      "Isopetra_Isopetra-Idle",
+      "Isopetra_Isopetra-Idle3",
+      "Isopetra_Isopetra-Run",
+      "Isopetra_Isopetra-Walk",
+      "Isopetra_IsopetraAll"
+    ],
+    "val": [
+      "Isopetra_Isopetra-Idle2"
+    ]
+  },
+  "Isopetra__skeleton_02": {
+    "train": [
+      "Isopetra_Isopetra_B01"
+    ],
+    "val": []
+  },
+  "Jaguar": {
+    "train": [
+      "Jaguar_Jaguar-Attack1",
+      "Jaguar_Jaguar-Attack2",
+      "Jaguar_Jaguar-Die1",
+      "Jaguar_Jaguar-Die2",
+      "Jaguar_Jaguar-GetUp",
+      "Jaguar_Jaguar-Idle",
+      "Jaguar_Jaguar-LieIdle",
+      "Jaguar_Jaguar-Low",
+      "Jaguar_Jaguar-Run",
+      "Jaguar_Jaguar-Sit",
+      "Jaguar_Jaguar-Stancing",
+      "Jaguar_Jaguar-Walk"
+    ],
+    "val": [
+      "Jaguar_Jaguar-Attack"
+    ]
+  },
+  "Jaws": {
+    "train": [
+      "Jaws_Shark-BiteLeft",
+      "Jaws_Shark-BiteRight",
+      "Jaws_Shark-Dead",
+      "Jaws_Shark-Swim",
+      "Jaws_Shark-Swim180",
+      "Jaws_Shark-SwimAt",
+      "Jaws_Shark-SwimLeft",
+      "Jaws_Shark-SwimRight"
+    ],
+    "val": [
+      "Jaws_Shark-DeadLoop"
+    ]
+  },
+  "KingCobra__skeleton_01": {
+    "train": [
+      "KingCobra_run"
+    ],
+    "val": []
+  },
+  "KingCobra__skeleton_02": {
+    "train": [
+      "KingCobra_walk_fast"
+    ],
+    "val": []
+  },
+  "KingCobra__skeleton_03": {
+    "train": [
+      "KingCobra_Cobra-Attack",
+      "KingCobra_Cobra-Attack2",
+      "KingCobra_Cobra-Bite",
+      "KingCobra_Cobra-GetUp",
+      "KingCobra_Cobra-Idle",
+      "KingCobra_Cobra-IdleLoop",
+      "KingCobra_Cobra-Killed",
+      "KingCobra_Cobra-Steady"
+    ],
+    "val": [
+      "KingCobra_Cobra-CircleBite"
+    ]
+  },
+  "KingCobra__skeleton_04": {
+    "train": [
+      "KingCobra_walk"
+    ],
+    "val": []
+  },
+  "Leapord": {
+    "train": [
+      "Leapord_Leopard-Attack",
+      "Leapord_Leopard-Bite",
+      "Leapord_Leopard-Death",
+      "Leapord_Leopard-Die",
+      "Leapord_Leopard-DieLoop",
+      "Leapord_Leopard-Graze",
+      "Leapord_Leopard-Idle",
+      "Leapord_Leopard-JumpUp",
+      "Leapord_Leopard-Pounce",
+      "Leapord_Leopard-PounceSwipe",
+      "Leapord_Leopard-Run",
+      "Leapord_Leopard-Sick",
+      "Leapord_Leopard-Walk"
+    ],
+    "val": [
+      "Leapord_Leopard-Growl"
+    ]
+  },
+  "Lion": {
+    "train": [
+      "Lion_LionAll-Attack",
+      "Lion_LionAll-Attack1",
+      "Lion_LionAll-DeathIdle",
+      "Lion_LionAll-Die",
+      "Lion_LionAll-Die2",
+      "Lion_LionAll-GetUp",
+      "Lion_LionAll-JumpBite",
+      "Lion_LionAll-LeapBite",
+      "Lion_LionAll-Run",
+      "Lion_LionAll-SlowIdle",
+      "Lion_LionAll-Sniff",
+      "Lion_LionAll-Swatting",
+      "Lion_LionAll-Walk",
+      "Lion_LionAll-Yawn"
+    ],
+    "val": [
+      "Lion_LionAll-Growl"
+    ]
+  },
+  "Lynx": {
+    "train": [
+      "Lynx_Lynx-Attack",
+      "Lynx_Lynx-Attack2",
+      "Lynx_Lynx-Attack3",
+      "Lynx_Lynx-Die",
+      "Lynx_Lynx-Die2",
+      "Lynx_Lynx-DieLoop",
+      "Lynx_Lynx-Idle2",
+      "Lynx_Lynx-Idle3",
+      "Lynx_Lynx-Jump",
+      "Lynx_Lynx-Run",
+      "Lynx_Lynx-Stand",
+      "Lynx_Lynx-Walk",
+      "Lynx_LynxALL"
+    ],
+    "val": [
+      "Lynx_Lynx-Idle"
+    ]
+  },
+  "Mammoth": {
+    "train": [
+      "Mammoth_Mammoth-DeathLoop",
+      "Mammoth_Mammoth-Die",
+      "Mammoth_Mammoth-Die2",
+      "Mammoth_Mammoth-Gesture",
+      "Mammoth_Mammoth-GetUp",
+      "Mammoth_Mammoth-IDLE",
+      "Mammoth_Mammoth-Idle2",
+      "Mammoth_Mammoth-Rise",
+      "Mammoth_Mammoth-Run",
+      "Mammoth_Mammoth-SideSwipe",
+      "Mammoth_Mammoth-Walk",
+      "Mammoth_MammothALL"
+    ],
+    "val": [
+      "Mammoth_Mammoth-Bellow"
+    ]
+  },
+  "Monkey__skeleton_01": {
+    "train": [
+      "Monkey_MonkeyAll"
+    ],
+    "val": []
+  },
+  "Monkey__skeleton_02": {
+    "train": [
+      "Monkey_B02_idle"
+    ],
+    "val": []
+  },
+  "Monkey__skeleton_03": {
+    "train": [
+      "Monkey_Monkey_B01"
+    ],
+    "val": []
+  },
+  "Monkey__skeleton_04": {
+    "train": [
+      "Monkey_idle_3"
+    ],
+    "val": []
+  },
+  "Monkey__skeleton_05": {
+    "train": [
+      "Monkey_idle_1"
+    ],
+    "val": []
+  },
+  "Monkey__skeleton_06": {
+    "train": [
+      "Monkey_Monkey_B02"
+    ],
+    "val": []
+  },
+  "Monkey__skeleton_07": {
+    "train": [
+      "Monkey_die"
+    ],
+    "val": []
+  },
+  "Monkey__skeleton_08": {
+    "train": [
+      "Monkey_atk_1"
+    ],
+    "val": []
+  },
+  "Monkey__skeleton_09": {
+    "train": [
+      "Monkey_B01_idle"
+    ],
+    "val": []
+  },
+  "Monkey__skeleton_10": {
+    "train": [
+      "Monkey_atk_4"
+    ],
+    "val": []
+  },
+  "Monkey__skeleton_11": {
+    "train": [
+      "Monkey_walk"
+    ],
+    "val": []
+  },
+  "Monkey__skeleton_12": {
+    "train": [
+      "Monkey_atk_3"
+    ],
+    "val": []
+  },
+  "Monkey__skeleton_13": {
+    "train": [
+      "Monkey_atk_2"
+    ],
+    "val": []
+  },
+  "Monkey__skeleton_14": {
+    "train": [
+      "Monkey_idle_2"
+    ],
+    "val": []
+  },
+  "Monkey__skeleton_15": {
+    "train": [
+      "Monkey_B02_die"
+    ],
+    "val": [
+      "Monkey_B02_atk"
+    ]
+  },
+  "Monkey__skeleton_16": {
+    "train": [
+      "Monkey_run"
+    ],
+    "val": []
+  },
+  "Monkey__skeleton_17": {
+    "train": [
+      "Monkey_B01_die"
+    ],
+    "val": []
+  },
+  "Ostrich": {
+    "train": [
+      "Ostrich_Ostrich-Attack",
+      "Ostrich_Ostrich-Attack2",
+      "Ostrich_Ostrich-Attack3",
+      "Ostrich_Ostrich-Attack4",
+      "Ostrich_Ostrich-Die",
+      "Ostrich_Ostrich-Idle",
+      "Ostrich_Ostrich-Idle3",
+      "Ostrich_Ostrich-Run",
+      "Ostrich_Ostrich-Walk",
+      "Ostrich_OstrichALL"
+    ],
+    "val": [
+      "Ostrich_Ostrich-Idle2"
+    ]
+  },
+  "Parrot": {
+    "train": [
+      "Parrot_Parrot-Attack",
+      "Parrot_Parrot-CircleFly",
+      "Parrot_Parrot-Die",
+      "Parrot_Parrot-Die2",
+      "Parrot_Parrot-Die3",
+      "Parrot_Parrot-Fly",
+      "Parrot_Parrot-Idle",
+      "Parrot_Parrot-Idle2",
+      "Parrot_Parrot-Land",
+      "Parrot_Parrot-Preen",
+      "Parrot_Parrot-Rise",
+      "Parrot_Parrot-Walk",
+      "Parrot_ParrotALL",
+      "Parrot_Parrot_A02"
+    ],
+    "val": [
+      "Parrot_Parrot-Hover"
+    ]
+  },
+  "Parrot2": {
+    "train": [
+      "Parrot2_Parrot-Idle",
+      "Parrot2_Parrot-IdleClean"
+    ],
+    "val": [
+      "Parrot2_Parrot-Land"
+    ]
+  },
+  "Pigeon__skeleton_01": {
+    "train": [
+      "Pigeon_Pigeon-Circle",
+      "Pigeon_Pigeon-Cooing",
+      "Pigeon_Pigeon-FlyLoop",
+      "Pigeon_Pigeon-Idle",
+      "Pigeon_Pigeon-IdleLoop",
+      "Pigeon_Pigeon-Land",
+      "Pigeon_Pigeon-Peck",
+      "Pigeon_Pigeon-Right",
+      "Pigeon_Pigeon-TakeOff",
+      "Pigeon_Pigeon-Walk"
+    ],
+    "val": [
+      "Pigeon_Pigeon-Left"
+    ]
+  },
+  "Pigeon__skeleton_02": {
+    "train": [
+      "Pigeon_SK_Anm_Pigeon"
+    ],
+    "val": []
+  },
+  "Pirrana": {
+    "train": [
+      "Pirrana_Piranna-Biting",
+      "Pirrana_Piranna-Biting2",
+      "Pirrana_Piranna-DeadFloat",
+      "Pirrana_Piranna-DeadFloat2",
+      "Pirrana_Piranna-DiveIn",
+      "Pirrana_Piranna-Flopping",
+      "Pirrana_Piranna-MidSwim",
+      "Pirrana_Piranna-RiseTop",
+      "Pirrana_Piranna-Swim",
+      "Pirrana_Piranna-SwimJump"
+    ],
+    "val": [
+      "Pirrana_Piranna-Jump2"
+    ]
+  },
+  "PolarBear": {
+    "train": [
+      "PolarBear_PolarBear-Attack",
+      "PolarBear_PolarBear-Attack2",
+      "PolarBear_PolarBear-Attack3",
+      "PolarBear_PolarBear-Die",
+      "PolarBear_PolarBear-Idle",
+      "PolarBear_PolarBear-Idle3",
+      "PolarBear_PolarBear-Run",
+      "PolarBear_PolarBear-Walk",
+      "PolarBear_PolarBearALL"
+    ],
+    "val": [
+      "PolarBear_PolarBear-Idle2"
+    ]
+  },
+  "PolarBearB__skeleton_01": {
+    "train": [
+      "PolarBearB_B_roar"
+    ],
+    "val": []
+  },
+  "PolarBearB__skeleton_02": {
+    "train": [
+      "PolarBearB_PolarBearB-Fall",
+      "PolarBearB_PolarBearB-GetUp",
+      "PolarBearB_PolarBearB-Idle",
+      "PolarBearB_PolarBearB-Play",
+      "PolarBearB_PolarBearB-Run",
+      "PolarBearB_PolarBearB-Walk",
+      "PolarBearB_PolarBearBALL"
+    ],
+    "val": [
+      "PolarBearB_PolarBearB-Idle2"
+    ]
+  },
+  "PolarBearB__skeleton_03": {
+    "train": [
+      "PolarBearB_B_idle_2"
+    ],
+    "val": []
+  },
+  "PolarBearB__skeleton_04": {
+    "train": [
+      "PolarBearB_B_idle_3"
+    ],
+    "val": []
+  },
+  "PolarBearB__skeleton_05": {
+    "train": [
+      "PolarBearB_B_run"
+    ],
+    "val": []
+  },
+  "PolarBearB__skeleton_06": {
+    "train": [
+      "PolarBearB_B_walk"
+    ],
+    "val": []
+  },
+  "PolarBearB__skeleton_07": {
+    "train": [
+      "PolarBearB_B_idle_1"
+    ],
+    "val": []
+  },
+  "PolarBearB__skeleton_08": {
+    "train": [
+      "PolarBearB_B_die"
+    ],
+    "val": []
+  },
+  "Pteranodon": {
+    "train": [
+      "Pteranodon_Pteranodon-ArcRight",
+      "Pteranodon_Pteranodon-Death",
+      "Pteranodon_Pteranodon-Death2",
+      "Pteranodon_Pteranodon-Fancy",
+      "Pteranodon_Pteranodon-Flapergasted",
+      "Pteranodon_Pteranodon-FlyLoop",
+      "Pteranodon_Pteranodon-GlideScream",
+      "Pteranodon_Pteranodon-Hit",
+      "Pteranodon_Pteranodon-Hit2",
+      "Pteranodon_Pteranodon-Lander",
+      "Pteranodon_Pteranodon-ScreamFly"
+    ],
+    "val": [
+      "Pteranodon_Pteranodon-ArcLeft"
+    ]
+  },
+  "Puppy": {
+    "train": [
+      "Puppy_Puppy-IdleEnergetic",
+      "Puppy_Puppy-IdleLayDown",
+      "Puppy_Puppy-Run"
+    ],
+    "val": [
+      "Puppy_Puppy-Walk"
+    ]
+  },
+  "Raindeer": {
+    "train": [
+      "Raindeer_Raindeer-Attack",
+      "Raindeer_Raindeer-Attack2",
+      "Raindeer_Raindeer-Attack3",
+      "Raindeer_Raindeer-Idle",
+      "Raindeer_Raindeer-Run",
+      "Raindeer_Raindeer-Stance",
+      "Raindeer_Raindeer-Walk",
+      "Raindeer_Raindeer-Yell"
+    ],
+    "val": [
+      "Raindeer_Raindeer-Die"
+    ]
+  },
+  "Raptor": {
+    "train": [
+      "Raptor_Raptor-Attack",
+      "Raptor_Raptor-Die",
+      "Raptor_Raptor-FastWalk",
+      "Raptor_Raptor-HeadSmash",
+      "Raptor_Raptor-Idle",
+      "Raptor_Raptor-LegScratch",
+      "Raptor_Raptor-Roar",
+      "Raptor_Raptor-SlowWalk",
+      "Raptor_Raptor-Yawn"
+    ],
+    "val": [
+      "Raptor_Raptor-Idle2"
+    ]
+  },
+  "Raptor2": {
+    "train": [
+      "Raptor2_Raptor-BreatheIdle",
+      "Raptor2_Raptor-Clean",
+      "Raptor2_Raptor-Die",
+      "Raptor2_Raptor-Die2GetUp",
+      "Raptor2_Raptor-DieGetUp",
+      "Raptor2_Raptor-Eat",
+      "Raptor2_Raptor-EatGrass",
+      "Raptor2_Raptor-EggTend",
+      "Raptor2_Raptor-Fall",
+      "Raptor2_Raptor-FallGetUp",
+      "Raptor2_Raptor-FenceClimbFall",
+      "Raptor2_Raptor-Idle",
+      "Raptor2_Raptor-IdleAlert",
+      "Raptor2_Raptor-IdleBiteApple",
+      "Raptor2_Raptor-IdleCurious",
+      "Raptor2_Raptor-IdleForward",
+      "Raptor2_Raptor-IdleLeft",
+      "Raptor2_Raptor-IdleLookLeft",
+      "Raptor2_Raptor-IdleLookRight",
+      "Raptor2_Raptor-IdleRight",
+      "Raptor2_Raptor-JumpSpinRun",
+      "Raptor2_Raptor-LeftHeadRun",
+      "Raptor2_Raptor-LeftRunBite",
+      "Raptor2_Raptor-RightHeadRun",
+      "Raptor2_Raptor-RightRunBite",
+      "Raptor2_Raptor-Run",
+      "Raptor2_Raptor-RunFall",
+      "Raptor2_Raptor-RunJumpBite",
+      "Raptor2_Raptor-RunJumpFall",
+      "Raptor2_Raptor-RunJumpLandBack",
+      "Raptor2_Raptor-RunJumpRoll",
+      "Raptor2_Raptor-RunScreamJump",
+      "Raptor2_Raptor-RunToStopRoar",
+      "Raptor2_Raptor-RunToStopRoar2",
+      "Raptor2_Raptor-SpinRun",
+      "Raptor2_Raptor-Stride",
+      "Raptor2_Raptor-Walk"
+    ],
+    "val": [
+      "Raptor2_Raptor-ReverseRun",
+      "Raptor2_Raptor-RunJump"
+    ]
+  },
+  "Raptor3": {
+    "train": [
+      "Raptor3_Raptor-BarkForward",
+      "Raptor3_Raptor-LeftPuke",
+      "Raptor3_Raptor-MeanLEft",
+      "Raptor3_Raptor-MeanRight",
+      "Raptor3_Raptor-RoarLeft",
+      "Raptor3_Raptor-RoarRight",
+      "Raptor3_Raptor-StepLeft",
+      "Raptor3_Raptor-StepRight",
+      "Raptor3_Raptor-StepRoar",
+      "Raptor3_Raptor-Yell",
+      "Raptor3_Raptor-roarforward",
+      "Raptor3_Raptor-run"
+    ],
+    "val": [
+      "Raptor3_Raptor-AttackRight"
+    ]
+  },
+  "Rat": {
+    "train": [
+      "Rat_Rat-AlertRun",
+      "Rat_Rat-Clean",
+      "Rat_Rat-Eat",
+      "Rat_Rat-Scamper",
+      "Rat_Rat-Trottle",
+      "Rat_RatAll"
+    ],
+    "val": [
+      "Rat_Rat-Itch"
+    ]
+  },
+  "Rhino": {
+    "train": [
+      "Rhino_Rhino-Attack",
+      "Rhino_Rhino-Attack2",
+      "Rhino_Rhino-Attack3",
+      "Rhino_Rhino-Idle2",
+      "Rhino_Rhino-Idle3",
+      "Rhino_Rhino-Run",
+      "Rhino_Rhino-Walk",
+      "Rhino_Rhino-idle"
+    ],
+    "val": [
+      "Rhino_Rhino-Die"
+    ]
+  },
+  "Roach": {
+    "train": [
+      "Roach_roach-Bristle",
+      "Roach_roach-Fall",
+      "Roach_roach-Hop",
+      "Roach_roach-Left",
+      "Roach_roach-Move",
+      "Roach_roach-Scurry",
+      "Roach_roach-Smelling",
+      "Roach_roach-TurnLeft",
+      "Roach_roach-TurnRight",
+      "Roach_roach-Uppity"
+    ],
+    "val": [
+      "Roach_roach-Shake"
+    ]
+  },
+  "SabreToothTiger": {
+    "train": [
+      "SabreToothTiger_SABREALL-180Flip",
+      "SabreToothTiger_SABREALL-180RIght",
+      "SabreToothTiger_SABREALL-45TurnLeft",
+      "SabreToothTiger_SABREALL-Agitated",
+      "SabreToothTiger_SABREALL-Attack",
+      "SabreToothTiger_SABREALL-BackUp",
+      "SabreToothTiger_SABREALL-Backing",
+      "SabreToothTiger_SABREALL-Begg",
+      "SabreToothTiger_SABREALL-Bite",
+      "SabreToothTiger_SABREALL-CageBat",
+      "SabreToothTiger_SABREALL-Cowering",
+      "SabreToothTiger_SABREALL-Cowering2",
+      "SabreToothTiger_SABREALL-Eating",
+      "SabreToothTiger_SABREALL-GetUp",
+      "SabreToothTiger_SABREALL-GetUp2",
+      "SabreToothTiger_SABREALL-GetUpMad",
+      "SabreToothTiger_SABREALL-Growling",
+      "SabreToothTiger_SABREALL-Layout",
+      "SabreToothTiger_SABREALL-Leaper",
+      "SabreToothTiger_SABREALL-LeftTurn",
+      "SabreToothTiger_SABREALL-PawSwatting",
+      "SabreToothTiger_SABREALL-PissedOff",
+      "SabreToothTiger_SABREALL-PissedOff2",
+      "SabreToothTiger_SABREALL-Raged",
+      "SabreToothTiger_SABREALL-Roaring",
+      "SabreToothTiger_SABREALL-Run",
+      "SabreToothTiger_SABREALL-Run2",
+      "SabreToothTiger_SABREALL-Sit",
+      "SabreToothTiger_SABREALL-Sitting",
+      "SabreToothTiger_SABREALL-Sitting2",
+      "SabreToothTiger_SABREALL-Slow180",
+      "SabreToothTiger_SABREALL-Snap",
+      "SabreToothTiger_SABREALL-Spin180",
+      "SabreToothTiger_SABREALL-Stablize",
+      "SabreToothTiger_SABREALL-Stalker",
+      "SabreToothTiger_SABREALL-StartLeft",
+      "SabreToothTiger_SABREALL-Startwalk",
+      "SabreToothTiger_SABREALL-SwatLft",
+      "SabreToothTiger_SABREALL-Swim",
+      "SabreToothTiger_SABREALL-Trot",
+      "SabreToothTiger_SABREALL-TurnLeft",
+      "SabreToothTiger_SABREALL-Warning"
+    ],
+    "val": [
+      "SabreToothTiger_SABREALL-Mean",
+      "SabreToothTiger_SABREALL-TiredYawn"
+    ]
+  },
+  "SandMouse": {
+    "train": [
+      "SandMouse_SandMouse-Attack",
+      "SandMouse_SandMouse-Attack2",
+      "SandMouse_SandMouse-Die",
+      "SandMouse_SandMouse-Die2",
+      "SandMouse_SandMouse-Die3",
+      "SandMouse_SandMouse-DigIn",
+      "SandMouse_SandMouse-Idle",
+      "SandMouse_SandMouse-Idle2",
+      "SandMouse_SandMouse-Idle3",
+      "SandMouse_SandMouse-Idle4",
+      "SandMouse_SandMouse-Run",
+      "SandMouse_SandMouse-Walk",
+      "SandMouse_SandMouseA02",
+      "SandMouse_SandMouseA03",
+      "SandMouse_SandMouseALL"
+    ],
+    "val": [
+      "SandMouse_SandMouse-DigOut"
+    ]
+  },
+  "Scorpion": {
+    "train": [
+      "Scorpion_scorpion-Attack1",
+      "Scorpion_scorpion-BackUp",
+      "Scorpion_scorpion-Defend",
+      "Scorpion_scorpion-IdleLoop",
+      "Scorpion_scorpion-Recoil",
+      "Scorpion_scorpion-Recoil2",
+      "Scorpion_scorpion-SlowForward",
+      "Scorpion_scorpion-Stinger",
+      "Scorpion_scorpion-StretchArms",
+      "Scorpion_scorpion-TurnLeft",
+      "Scorpion_scorpion-TurnRight",
+      "Scorpion_scorpion-WalkForward"
+    ],
+    "val": [
+      "Scorpion_scorpion-Agitated"
+    ]
+  },
+  "Scorpion-2": {
+    "train": [
+      "Scorpion-2_Scorpion-Attack_Retreat",
+      "Scorpion-2_Scorpion-Back_Up",
+      "Scorpion-2_Scorpion-Back_confused",
+      "Scorpion-2_Scorpion-Backing_Crazy",
+      "Scorpion-2_Scorpion-Belly_Death",
+      "Scorpion-2_Scorpion-Belly_death_1",
+      "Scorpion-2_Scorpion-Bite_Attack",
+      "Scorpion-2_Scorpion-Blasted_Death",
+      "Scorpion-2_Scorpion-Death",
+      "Scorpion-2_Scorpion-Death_2",
+      "Scorpion-2_Scorpion-Flipped",
+      "Scorpion-2_Scorpion-Guns",
+      "Scorpion-2_Scorpion-Hasppy_Fangs",
+      "Scorpion-2_Scorpion-Hit_and_Sorr",
+      "Scorpion-2_Scorpion-Idle",
+      "Scorpion-2_Scorpion-Jump_Sting",
+      "Scorpion-2_Scorpion-Limp_Alive",
+      "Scorpion-2_Scorpion-Lunge_Forward",
+      "Scorpion-2_Scorpion-On_back_Dying",
+      "Scorpion-2_Scorpion-Pissed_Fangs",
+      "Scorpion-2_Scorpion-Rising_Walk",
+      "Scorpion-2_Scorpion-Run_Attack",
+      "Scorpion-2_Scorpion-Run_To_Attrack",
+      "Scorpion-2_Scorpion-Settle_Back",
+      "Scorpion-2_Scorpion-Slide_Back",
+      "Scorpion-2_Scorpion-Slow_Idle",
+      "Scorpion-2_Scorpion-Stand_Attack",
+      "Scorpion-2_Scorpion-Standing_Run",
+      "Scorpion-2_Scorpion-SteadyWalk",
+      "Scorpion-2_Scorpion-Sting_Kill",
+      "Scorpion-2_Scorpion-Sting_Kill_2",
+      "Scorpion-2_Scorpion-Sting_ya",
+      "Scorpion-2_Scorpion-Strafe_Left",
+      "Scorpion-2_Scorpion-Strafe_Right",
+      "Scorpion-2_Scorpion-Walk_Forward",
+      "Scorpion-2_Scorpion-Walk_and_Rise",
+      "Scorpion-2_Scorpion-Wild_Death",
+      "Scorpion-2_Scorpion-stand_ready"
+    ],
+    "val": [
+      "Scorpion-2_Scorpion-Bite_Grab",
+      "Scorpion-2_Scorpion-Sting_Ya_YA"
+    ]
+  },
+  "Skunk": {
+    "train": [
+      "Skunk_Skunk-Die",
+      "Skunk_Skunk-Idle",
+      "Skunk_Skunk-Idle2",
+      "Skunk_Skunk-Run",
+      "Skunk_Skunk-Spray",
+      "Skunk_Skunk-Walk",
+      "Skunk_SkunkALL",
+      "Skunk_walk"
+    ],
+    "val": [
+      "Skunk_Skunk-Idle3"
+    ]
+  },
+  "Spider": {
+    "train": [
+      "Spider_SPIDER-Attack1",
+      "Spider_SPIDER-Attack2",
+      "Spider_SPIDER-Attack4",
+      "Spider_SPIDER-Attack5",
+      "Spider_SPIDER-AttackLeft",
+      "Spider_SPIDER-Attackright",
+      "Spider_SPIDER-BackRear",
+      "Spider_SPIDER-BackitUp",
+      "Spider_SPIDER-Fangy",
+      "Spider_SPIDER-Gliding",
+      "Spider_SPIDER-Jump",
+      "Spider_SPIDER-LandinHAir",
+      "Spider_SPIDER-Landing",
+      "Spider_SPIDER-Rearing",
+      "Spider_SPIDER-Retreat",
+      "Spider_SPIDER-RetreatInjured",
+      "Spider_SPIDER-RetreatSlow",
+      "Spider_SPIDER-Rising",
+      "Spider_SPIDER-Scary",
+      "Spider_SPIDER-Scramble",
+      "Spider_SPIDER-SlowIdle",
+      "Spider_SPIDER-Take_001",
+      "Spider_SPIDER-TravelWeb",
+      "Spider_SPIDER-Walker",
+      "Spider_SPIDER-barking",
+      "Spider_SPIDER-injuredwalk",
+      "Spider_SPIDER-runleft",
+      "Spider_SPIDER-walkleft",
+      "Spider_SPIDER-walkloop",
+      "Spider_SPIDER-weaver",
+      "Spider_SPIDER-weaving"
+    ],
+    "val": [
+      "Spider_SPIDER-Hurt",
+      "Spider_SPIDER-Riser"
+    ]
+  },
+  "SpiderG": {
+    "train": [
+      "SpiderG_Spider-Attack",
+      "SpiderG_Spider-Attack2",
+      "SpiderG_Spider-Attack3",
+      "SpiderG_Spider-Attack4",
+      "SpiderG_Spider-Attack5",
+      "SpiderG_Spider-Attack6",
+      "SpiderG_Spider-Attack7",
+      "SpiderG_Spider-Burrough",
+      "SpiderG_Spider-ComeOut",
+      "SpiderG_Spider-Die",
+      "SpiderG_Spider-Fangs",
+      "SpiderG_Spider-Idle",
+      "SpiderG_Spider-Idle2",
+      "SpiderG_Spider-Idle3",
+      "SpiderG_Spider-Retreat",
+      "SpiderG_Spider-Shiver",
+      "SpiderG_Spider-Walk",
+      "SpiderG_SpiderG_A01",
+      "SpiderG_SpiderG_B02"
+    ],
+    "val": [
+      "SpiderG_Spider-Run"
+    ]
+  },
+  "Stego": {
+    "train": [
+      "Stego_Stego-Attack",
+      "Stego_Stego-Attack2",
+      "Stego_Stego-Attack3",
+      "Stego_Stego-Fall",
+      "Stego_Stego-Idle",
+      "Stego_Stego-Run",
+      "Stego_Stego-Shake",
+      "Stego_Stego-Slowwalk",
+      "Stego_Stego-TailWhip"
+    ],
+    "val": [
+      "Stego_Stego-Idle2"
+    ]
+  },
+  "Trex": {
+    "train": [
+      "Trex_T-Rex-Chase_Roar",
+      "Trex_T-Rex-idle_investigae_out",
+      "Trex_T-Rex-turn_180_look",
+      "Trex_T-Rex-Big_roar_step",
+      "Trex_T-Rex-human_shake",
+      "Trex_T-Rex-death",
+      "Trex_T-Rex-look_left",
+      "Trex_T-Rex-run_head_low",
+      "Trex_T-Rex-roar_left",
+      "Trex_T-Rex-long_death",
+      "Trex_T-Rex-walk_head_low",
+      "Trex_T-Rex-walk_right_bite",
+      "Trex_T-Rex-hit_torso_left",
+      "Trex_T-Rex-roar_right",
+      "Trex_T-Rex-STILL",
+      "Trex_T-Rex-sprint_head_left",
+      "Trex_T-Rex-mama_cave_bite_out",
+      "Trex_T-Rex-look_forward",
+      "Trex_T-Rex-walk_left_bite",
+      "Trex_T-Rex-hit_head_2",
+      "Trex_T-Rex-walk_loop",
+      "Trex_T-Rex-run_head_butt_right",
+      "Trex_T-Rex-kill_long",
+      "Trex_T-Rex-look_right",
+      "Trex_T-Rex-chase_bite",
+      "Trex_T-Rex-hit_torso_right",
+      "Trex_T-Rex-death_short",
+      "Trex_T-Rex-chase_roar_right",
+      "Trex_T-Rex-run_head_loop",
+      "Trex_T-Rex-turn_180_right",
+      "Trex_T-Rex-chase_head_butt_left",
+      "Trex_T-Rex-idle_investigate",
+      "Trex_T-Rex-bite_close_left",
+      "Trex_T-Rex-hit_head_1",
+      "Trex_T-Rex-idle_sneeze",
+      "Trex_T-Rex-bite_90_right",
+      "Trex_T-Rex-hit_leg_2",
+      "Trex_T-Rex-walk_bite",
+      "Trex_T-Rex-hit_head_3",
+      "Trex_T-Rex-idle_to_run",
+      "Trex_T-Rex-idle_investigate_loop",
+      "Trex_T-Rex-step_back",
+      "Trex_T-Rex-chase_bite_left",
+      "Trex_T-Rex-sprint_loop",
+      "Trex_T-Rex-head_butt_left",
+      "Trex_T-Rex-chase_bite_right",
+      "Trex_T-Rex-climb_down",
+      "Trex_T-Rex-run_to_stop",
+      "Trex_T-Rex-mama_cave_bite_loop",
+      "Trex_T-Rex-bite_step_back_forward",
+      "Trex_T-Rex-bite_close_right",
+      "Trex_T-Rex-run_head_low_2",
+      "Trex_T-Rex-walk_slow_loop",
+      "Trex_T-Rex-stunned",
+      "Trex_T-Rex-hit_leg",
+      "Trex_T-Rex-turn_180_turn_right",
+      "Trex_T-Rex-look_forward_2",
+      "Trex_T-Rex-chase_roar_left",
+      "Trex_T-Rex-bite_90_left",
+      "Trex_T-Rex-human_bite",
+      "Trex_T-Rex-turn_90_right",
+      "Trex_T-Rex-walk_back",
+      "Trex_T-Rex-idle_attack_to_run_right",
+      "Trex_T-Rex-ROAR",
+      "Trex_T-Rex-idle_attack",
+      "Trex_T-Rex-turn_90_left",
+      "Trex_T-Rex-sprint_head_right"
+    ],
+    "val": [
+      "Trex_T-Rex-climb_up",
+      "Trex_T-Rex-human_kill",
+      "Trex_T-Rex-mama_cave_bite",
+      "Trex_T-Rex-idle_attack_to_run_left"
+    ]
+  },
+  "Tricera": {
+    "train": [
+      "Tricera_Tricera-Attack",
+      "Tricera_Tricera-Attack2",
+      "Tricera_Tricera-Attack3",
+      "Tricera_Tricera-Fall",
+      "Tricera_Tricera-Idle",
+      "Tricera_Tricera-NoseDirt",
+      "Tricera_Tricera-Run",
+      "Tricera_Tricera-Walk"
+    ],
+    "val": [
+      "Tricera_Tricera-Attack4"
+    ]
+  },
+  "Tukan": {
+    "train": [
+      "Tukan_TUKANALL-Fly",
+      "Tukan_TUKANALL-FlyForward",
+      "Tukan_TUKANALL-FlyLoop",
+      "Tukan_TUKANALL-Shake",
+      "Tukan_TUKANALL-SlowDown",
+      "Tukan_TUKANALL-Sqwak",
+      "Tukan_TUKANALL-WingScratch"
+    ],
+    "val": [
+      "Tukan_TUKANALL-IdleLook"
+    ]
+  },
+  "Turtle": {
+    "train": [
+      "Turtle_Turtle-Attack",
+      "Turtle_Turtle-Attack2",
+      "Turtle_Turtle-Attack3",
+      "Turtle_Turtle-Hide",
+      "Turtle_Turtle-Idle",
+      "Turtle_Turtle-Onback",
+      "Turtle_Turtle-Run",
+      "Turtle_Turtle-Walk",
+      "Turtle_Turtle-Yawn"
+    ],
+    "val": [
+      "Turtle_Turtle-Idle2"
+    ]
+  },
+  "Tyranno": {
+    "train": [
+      "Tyranno_Tyranno-Attack",
+      "Tyranno_Tyranno-Attack2",
+      "Tyranno_Tyranno-Fall",
+      "Tyranno_Tyranno-HeadButt",
+      "Tyranno_Tyranno-Idle",
+      "Tyranno_Tyranno-Roar",
+      "Tyranno_Tyranno-Run",
+      "Tyranno_Tyranno-TailWhip",
+      "Tyranno_Tyranno-Walk"
+    ],
+    "val": [
+      "Tyranno_Tyranno-Idle2"
+    ]
+  }
+}

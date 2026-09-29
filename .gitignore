@@ -1,0 +1,99 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.pyd
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+var/
+sdist/
+develop-eggs/
+.installed.cfg
+lib/
+lib64/
+.eggs/
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Distribution / packaging
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Jupyter Notebooks
+.ipynb_checkpoints
+*.ipynb
+
+# Unit test / coverage
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# MyPy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# PyCharm / IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# ML / training artifacts
+checkpoints/
+runs/
+wandb/
+mlruns/
+*.pth
+*.pt
+*.ckpt
+*.safetensors
+*.pkl
+*.pickle
+
+# Logs
+*.log
+logs/
+output/
+outputs/
+results/
+
+# Runtime-only local artifacts.
+/checkpoints
+
+# Backbone sources and weights fetched by scripts/setup_backbones.sh.
+/third_party/
+
+# Downloaded Mobjaverse assets are provided separately.
+/preprocess/mobjaverse/third_party/mobjaverse/
+
+
+# Local performance diagnostics and machine-specific trial launchers.
+.torchinductor_cache/
+.torch_extensions
+
+demo*/
+runtime/

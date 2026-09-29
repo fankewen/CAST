@@ -1,0 +1,17 @@
+# Install PyTorch separately before this file. See README.md.
+
+# Core runtime and utility packages.
+numpy==1.26.4
+PyYAML==6.0.3
+scipy==1.11.4
+tqdm==4.67.1
+tensorboard==2.20.0
+opencv-python==4.11.0.86
+Pillow==12.3.0
+matplotlib==3.7.3
+einops==0.8.1
+trimesh==4.11.0
+pyrender==0.1.45
+
+# Windows-only TorchInductor backend.
+# triton-windows==3.3.1.post21 ; platform_system == "Windows"

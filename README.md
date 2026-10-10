@@ -1,16 +1,34 @@
 # CAST: Real-Time Motion Capture for Any Skeleton Topology
 
-Anonymous Authors — under review.
+Pu Pang, Zhongfei Qing, Ling-Hao Chen, Songnan Li, Hua Huang, and Bo Hu.
 
-[Project Page](https://cast-mocap.github.io/) · [Installation](docs/installation.md) · [Model Weights](#model-weights) · [Evaluation](#evaluation)
+[Installation](docs/installation.md) · [Model Weights](#model-weights) · [Inference](#inference) · [Evaluation](#evaluation)
 
 ![CAST teaser](assets/teaser.png)
 
 *CAST animates four target skeletons (left) from each of seven input clips (top).*
 
-CAST captures motion from RGB video for target skeletons with different topologies.
-It uses GRACE (Gated Rotation Alignment and CorrEction) for topology-aware
-analytic rotation correction. This repository contains the CAST inference code.
+CAST recovers motion from monocular RGB video and transfers it to a target
+skeleton, including skeleton topologies that differ from the subject in the
+video. It combines learned joint rotations with GRACE (Gated Rotation Alignment
+and CorrEction), which corrects composed orientations using predicted global
+bone directions.
+
+This release provides pretrained checkpoints, inference and rendering code,
+and evaluation tools. Start with [Installation](docs/installation.md), download
+a checkpoint from [Model Weights](#model-weights), and follow
+[Inference](#inference) to animate a target character from a video.
+
+## Release Plan / TODO
+
+- [x] Release the CAST-B and CAST-L checkpoints listed below, including the
+  DINOv2/DINOv3 and without-GRACE variants.
+- [x] Release offline video-to-motion inference and mesh rendering.
+- [x] Release matched-rig and cross-skeleton evaluation tools and cache preparation.
+- [ ] Release the training code and reproducible training instructions.
+- [ ] Release the causal and motion-completion model configurations and checkpoints.
+- [ ] Release the Blender live-capture addon and its real-time inference workflow.
+- [ ] Add an end-to-end example for preparing a new skinned FBX and running inference.
 
 ## Installation
 

@@ -82,7 +82,6 @@ class BaseModel(nn.Module):
         rotation_query_source: str = "pose",
         auxiliary_pose_head: bool = False,
         auxiliary_pose_detach_features: bool = False,
-        pose_fusion_cfg: Optional[dict] = None,
         bone_direction_head_cfg: Optional[dict] = None,
         grace_cfg: Optional[dict] = None,
         grace_source: str = "bone_direction",
@@ -153,28 +152,6 @@ class BaseModel(nn.Module):
             self.auxiliary_pose_head = AuxiliaryPoseHead(feature_dim)
         else:
             self.auxiliary_pose_head = None
-        if pose_fusion_cfg is not None:
-            if rotation_query_source != "video_features":
-                raise ValueError(
-                    "pose_fusion_cfg requires "
-                    "rotation_query_source='video_features'"
-                )
-            if self.auxiliary_pose_head is None:
-                raise ValueError(
-                    "pose_fusion_cfg requires auxiliary_pose_head=true"
-                )
-            self.pose_fusion = instantiate_from_config(pose_fusion_cfg)
-            feature_dim = int(self.encoder.output_feature_dim)
-            fusion_feature_dim = int(
-                getattr(self.pose_fusion, "feature_dim", -1)
-            )
-            if fusion_feature_dim != feature_dim:
-                raise ValueError(
-                    "Pose-fusion/video feature widths differ: "
-                    f"{fusion_feature_dim}/{feature_dim}"
-                )
-        else:
-            self.pose_fusion = None
 
         self.bone_direction_head = None
         if bone_direction_head_cfg is not None:
@@ -274,7 +251,6 @@ class BaseModel(nn.Module):
 
         model_batch = dict(batch)
         pred_position = None
-        pose_fusion_output = None
         bone_direction_output = None
         grace_output = None
 
@@ -337,7 +313,6 @@ class BaseModel(nn.Module):
                     self.auxiliary_pose_head is not None
                     and (
                         return_reconstructed_positions
-                        or self.pose_fusion is not None
                         or self.grace_source == "pred_position"
                     )
                 )
@@ -360,17 +335,6 @@ class BaseModel(nn.Module):
                         * valid.unsqueeze(-1).to(pred_position.dtype)
                     )
                 rotation_query = video_output
-                if self.pose_fusion is not None:
-                    if pred_position is None:
-                        raise RuntimeError(
-                            "Pose fusion requires an auxiliary pose prediction"
-                        )
-                    pose_fusion_output = self.pose_fusion(
-                        visual_features=video_output,
-                        predicted_position=pred_position,
-                        batch=model_batch,
-                    )
-                    rotation_query = pose_fusion_output["fused_query"]
                 if self.bone_direction_head is not None:
                     bone_direction_output = self.bone_direction_head(
                         visual_features=video_output,
@@ -566,10 +530,6 @@ class BaseModel(nn.Module):
             output.update(bone_direction_output)
         if pred_position is not None:
             output["pred_position"] = pred_position
-        if pose_fusion_output is not None:
-            for key, value in pose_fusion_output.items():
-                if key != "fused_query":
-                    output[key] = value
         return output
 
     @torch.no_grad()
@@ -692,19 +652,11 @@ class BaseModel(nn.Module):
         bone_direction_output = None
         need_auxiliary_pose = (
             self.auxiliary_pose_head is not None
-            and (
-                self.pose_fusion is not None
-                or self.grace_source == "pred_position"
-            )
+            and self.grace_source == "pred_position"
         )
         if need_auxiliary_pose:
             pred_position = self.auxiliary_pose_head(video_output)
             pred_position = pred_position - pred_position[:, :, 0:1]
-        if self.pose_fusion is not None:
-            pose_fusion_output = self.pose_fusion(
-                visual_features=video_output, predicted_position=pred_position, batch=model_batch
-            )
-            rotation_query = pose_fusion_output["fused_query"]
         if self.bone_direction_head is not None:
             bone_direction_output = self.bone_direction_head(
                 visual_features=video_output,

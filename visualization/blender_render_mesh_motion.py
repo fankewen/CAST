@@ -28,9 +28,11 @@ from utils.mesh_skinning import (
     blender_camera_calibration_from_opencv,
     deformation_deltas,
     linear_blend_skinning,
+    linear_blend_skinning_normals,
     load_mesh_asset,
     opencv_camera_points_to_blender,
 )
+from utils.blender_materials import restore_materials
 
 
 def parse_args():
@@ -115,6 +117,73 @@ def add_area_light(name, location, energy, size):
     bpy.context.collection.objects.link(obj)
     obj.location = location
     return obj
+
+
+def apply_mesh_appearance(mesh_data, asset, asset_dir):
+    """Restore new FBX assets faithfully; retain compatibility with legacy NPZs."""
+    asset_dir = Path(asset_dir).resolve()
+    faces = np.asarray(asset["faces"], dtype=np.int32)
+    if "uvs" in asset:
+        uv = np.asarray(asset["uvs"], dtype=np.float32)
+        if uv.shape == (len(asset["vertices"]), 2):
+            uv = uv[faces].reshape(-1, 2)
+        if uv.shape != (len(mesh_data.loops), 2):
+            raise ValueError(f"Invalid mesh UV shape {uv.shape}")
+        layer = mesh_data.uv_layers.new(name="DiffuseUV")
+        layer.data.foreach_set("uv", uv.reshape(-1))
+        if "uv_layer_names" in asset:
+            names = [str(name) for name in asset["uv_layer_names"]]
+            layers = np.asarray(asset["uv_layers"], dtype=np.float32)
+            if names and layers.shape != (len(names), len(mesh_data.loops), 2):
+                raise ValueError("Invalid named UV layer shape")
+            # DiffuseUV retains the source's active UVs. Named UV nodes and
+            # tangent-space normal maps can refer to the other original layers.
+            for name, uv in zip(names, layers):
+                layer = mesh_data.uv_layers.get(name) or mesh_data.uv_layers.new(name=name)
+                layer.data.foreach_set("uv", uv.reshape(-1))
+            mesh_data.uv_layers.active_index = 0
+            mesh_data.uv_layers[0].active_render = True
+    texture_refs = [str(value) for value in asset.get("texture_files", [])]
+    face_material = np.asarray(asset.get("face_material", np.zeros(len(faces))), dtype=np.int32)
+    if face_material.shape != (len(faces),) or np.any(face_material < 0):
+        raise ValueError("Invalid per-face material indices")
+    textured = False
+    if "materials_json" in asset:
+        materials = restore_materials(asset["materials_json"], asset_dir)
+        if not materials or np.any(face_material >= len(materials)):
+            raise ValueError("Face material index has no exported material")
+        textured = any(node.type == "TEX_IMAGE" and node.image is not None
+                       for material in materials for node in material.node_tree.nodes)
+    else:
+        materials = []
+        material_count = max(1, len(texture_refs), int(face_material.max(initial=0)) + 1)
+        for index in range(material_count):
+            material = bpy.data.materials.new(f"DrivenMeshMaterial_{index}")
+            material.use_nodes = True
+            material.diffuse_color = (0.68, 0.72, 0.78, 1.0)
+            principled = material.node_tree.nodes.get("Principled BSDF")
+            principled.inputs["Base Color"].default_value = material.diffuse_color
+            principled.inputs["Roughness"].default_value = 0.72
+            if "uvs" in asset and index < len(texture_refs) and texture_refs[index]:
+                path = asset_dir / texture_refs[index].replace("\\", "/")
+                if not path.is_file():
+                    raise FileNotFoundError(f"Missing legacy asset texture: {path}")
+                image = bpy.data.images.load(str(path), check_existing=True)
+                image.colorspace_settings.name = "sRGB"
+                node = material.node_tree.nodes.new("ShaderNodeTexImage")
+                node.image = image
+                material.node_tree.links.new(node.outputs["Color"], principled.inputs["Base Color"])
+                textured = True
+            materials.append(material)
+    for material in materials:
+        mesh_data.materials.append(material)
+    smooth = np.asarray(asset.get("face_smooth", np.ones(len(faces))), dtype=bool)
+    if smooth.shape != (len(faces),):
+        raise ValueError("Invalid per-face smooth flags")
+    for polygon, index, use_smooth in zip(mesh_data.polygons, face_material, smooth):
+        polygon.material_index = int(index)
+        polygon.use_smooth = bool(use_smooth)
+    return textured
 
 
 def main():
@@ -237,51 +306,11 @@ def main():
     mesh_obj = bpy.data.objects.new("DrivenMesh", mesh_data)
     bpy.context.collection.objects.link(mesh_obj)
 
-    # mesh_asset.npz stores per-face UVs and texture paths relative to the asset.
-    texture_refs = [str(value) for value in asset.get("texture_files", [])]
-    has_uv = "uvs" in asset and any(texture_refs)
-    textured = False
-    if has_uv:
-        uv = np.asarray(asset["uvs"], dtype=np.float32)
-        faces = np.asarray(asset["faces"], dtype=np.int32)
-        if uv.shape == (len(faces) * 3, 2):
-            face_uv = uv.reshape(len(faces), 3, 2)
-        elif uv.shape == (len(asset["vertices"]), 2):
-            face_uv = uv[faces]
-        else:
-            raise ValueError(f"Invalid mesh UV shape {uv.shape}")
-        uv_layer = mesh_data.uv_layers.new(name="DiffuseUV")
-        for polygon_index, polygon in enumerate(mesh_data.polygons):
-            for corner, loop_index in enumerate(polygon.loop_indices):
-                uv_layer.data[loop_index].uv = face_uv[polygon_index, corner]
-    face_material = np.asarray(
-        asset.get("face_material", np.zeros(len(mesh_data.polygons), dtype=np.int32)),
-        dtype=np.int32,
-    )
-    if face_material.shape != (len(mesh_data.polygons),) or np.any(face_material < 0):
-        raise ValueError("Invalid per-face material indices")
-    material_count = max(1, len(texture_refs), int(face_material.max()) + 1)
-    for index in range(material_count):
-        material = bpy.data.materials.new(f"DrivenMeshMaterial_{index}")
-        material.use_nodes = True
-        material.diffuse_color = (0.68, 0.72, 0.78, 1.0)
-        principled = material.node_tree.nodes.get("Principled BSDF")
-        principled.inputs["Base Color"].default_value = (0.68, 0.72, 0.78, 1.0)
-        principled.inputs["Roughness"].default_value = 0.72
-        if has_uv and index < len(texture_refs) and texture_refs[index]:
-            reference = Path(texture_refs[index].replace("\\", "/"))
-            texture_path = args.mesh_path.parent / reference
-            if texture_path.is_file():
-                texture_image = bpy.data.images.load(str(texture_path), check_existing=True)
-                image_node = material.node_tree.nodes.new("ShaderNodeTexImage")
-                image_node.image = texture_image
-                texture_image.colorspace_settings.name = "sRGB"
-                material.node_tree.links.new(image_node.outputs["Color"], principled.inputs["Base Color"])
-                textured = True
-        mesh_data.materials.append(material)
-    for polygon, material_index in zip(mesh_data.polygons, face_material):
-        polygon.material_index = int(material_index)
-        polygon.use_smooth = True
+    textured = apply_mesh_appearance(mesh_data, asset, args.mesh_path.parent)
+    bind_normals = asset.get("corner_normals")
+    corner_vertices = np.asarray(asset["faces"], dtype=np.int32).reshape(-1)
+    if bind_normals is not None and np.asarray(bind_normals).shape != (len(mesh_data.loops), 3):
+        raise ValueError("Invalid split normal shape")
 
     all_low = display.min(axis=(0, 1))
     all_high = display.max(axis=(0, 1))
@@ -421,6 +450,13 @@ def main():
     for frame, vertices in enumerate(display):
         mesh_data.vertices.foreach_set("co", vertices.reshape(-1))
         mesh_data.update()
+        if bind_normals is not None:
+            normals = linear_blend_skinning_normals(
+                bind_normals, corner_vertices, asset["weights"], deltas[frame]
+            )
+            if hasattr(mesh_data, "use_auto_smooth"):
+                mesh_data.use_auto_smooth = True
+            mesh_data.normals_split_custom_set(opencv_camera_points_to_blender(normals).tolist())
         scene.render.filepath = str(
             (args.output_dir / f"frame_{frame:04d}.png").resolve()
         )

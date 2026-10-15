@@ -1,5 +1,6 @@
 """Rotation conversions used by the unified video2motion pipeline."""
 
+import numpy as np
 import torch
 import torch.nn.functional as F
 
@@ -57,3 +58,11 @@ def project_rotmat_to_so3(matrix: torch.Tensor) -> torch.Tensor:
 def rotmat_to_rot6d_tensor(matrix: torch.Tensor) -> torch.Tensor:
     """Encode matrices as concat(R[:,0], R[:,1]), matching the cache format."""
     return torch.cat((matrix[..., :, 0], matrix[..., :, 1]), dim=-1)
+
+
+def rotation_matrices_from_fused_sum(rotation_sum: np.ndarray, count: np.ndarray) -> np.ndarray:
+    """Project overlap-averaged matrices back to proper SO(3) on CPU."""
+    if np.any(count == 0):
+        raise ValueError(f"Incomplete visualization coverage: {np.flatnonzero(count == 0)[:10].tolist()}")
+    matrix = torch.from_numpy(rotation_sum / count[:, None, None, None]).float()
+    return project_rotmat_to_so3(matrix).numpy()

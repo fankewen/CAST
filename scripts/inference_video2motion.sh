@@ -61,7 +61,7 @@ mesh_asset_dir="$output_dir/mesh_asset"
 mesh_path="$mesh_asset_dir/mesh_asset.npz"
 
 # 1. Extract the target's skinned mesh directly from its original source file.
-python -m scripts.build_mesh_asset \
+python -m utils.export_skinned_mesh \
   --source "$mesh_source" \
   --static "$static_path" \
   --output-dir "$mesh_asset_dir" \

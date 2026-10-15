@@ -21,11 +21,8 @@ from utils.config_utils import instantiate_from_config, load_yaml_config
 from utils.mesh_skinning import rest_global_transforms
 from utils.model_inputs import normalize_model_skeleton_inputs
 from utils.motion_metrics import topocap_protocol_metrics
-from utils.motion_visualization import (
-    local_rotation_fk,
-    motion_output_dir,
-    write_unlabeled_motion_npz,
-)
+from utils.fk_depth import local_rotation_fk
+from utils.motion_io import motion_output_dir, write_unlabeled_motion_npz
 from utils.rotation import (
     project_rotmat_to_so3,
     rot6d_to_rotmat_tensor,

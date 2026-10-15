@@ -1,52 +1,32 @@
 #!/usr/bin/env python3
-"""Extract a skinned render mesh directly from a character FBX in Blender."""
+"""Extract FBX mesh, skin weights, and materials inside Blender."""
 
 from __future__ import annotations
 
 import argparse
+import json
 import os
 from pathlib import Path
-import shutil
 import sys
 
-import bmesh
 import bpy
 import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from utils.mesh_skinning import fit_proper_similarity, rest_global_transforms
+from utils.blender_materials import MaterialExporter
+from utils.fbx_coordinates import fbx_source_hash, read_fbx_coordinates
 
 
 def image_for_material(material):
     if material is None or not material.use_nodes or material.node_tree is None:
         return None
-    principled = material.node_tree.nodes.get("Principled BSDF")
+    principled = next((node for node in material.node_tree.nodes if node.type == "BSDF_PRINCIPLED"), None)
     if principled is not None:
         for link in principled.inputs["Base Color"].links:
             if link.from_node.type == "TEX_IMAGE" and link.from_node.image is not None:
                 return link.from_node.image
-    return next(
-        (node.image for node in material.node_tree.nodes
-         if node.type == "TEX_IMAGE" and node.image is not None),
-        None,
-    )
-
-
-def copy_image(image, destination: Path, material_index: int) -> str:
-    if image is None:
-        return ""
-    source = Path(bpy.path.abspath(image.filepath)) if image.filepath else None
-    destination.mkdir(parents=True, exist_ok=True)
-    if source is not None and source.is_file():
-        target = destination / f"{material_index:03d}_{source.name}"
-        if source.resolve() != target.resolve():
-            shutil.copyfile(source, target)
-    elif image.has_data:
-        target = destination / f"{material_index:03d}.png"
-        image.save_render(str(target))
-    else:
-        return ""
-    return (Path("textures") / target.name).as_posix()
+    return None
 
 
 def source_driver(name: str, bones, target_indices: dict[str, int]) -> int | None:
@@ -77,7 +57,18 @@ def main() -> None:
     except Exception:
         pass
     bpy.ops.wm.read_factory_settings(use_empty=True)
-    bpy.ops.import_scene.fbx(filepath=str(args.fbx.resolve()))
+    import_options = dict(use_anim=False, automatic_bone_orientation=False,
+                          ignore_leaf_bones=False, primary_bone_axis='Y', secondary_bone_axis='X')
+    explicit_basis = int(static.get('fbx_basis_conversion_version', 0)) == 2
+    if explicit_basis:
+        metadata, _, _ = read_fbx_coordinates(args.fbx)
+        if fbx_source_hash(args.fbx) != static['source_fbx_sha256']:
+            raise ValueError('FBX differs from the source used to generate static.npy')
+        import_options.update(use_manual_orientation=True,
+                              axis_up=metadata['blender_import_up'],
+                              axis_forward=metadata['blender_import_forward'],
+                              global_scale=1.0, bake_space_transform=False)
+    bpy.ops.import_scene.fbx(filepath=str(args.fbx.resolve()), **import_options)
     armatures = [obj for obj in bpy.context.scene.objects if obj.type == "ARMATURE"]
     meshes = [obj for obj in bpy.context.scene.objects if obj.type == "MESH"]
     if len(armatures) != 1 or not meshes:
@@ -93,22 +84,39 @@ def main() -> None:
         [armature.matrix_world @ bones[name].head_local for name in matched],
         dtype=np.float64,
     )
-    fit = fit_proper_similarity(source_rest, target_rest[[target_indices[name] for name in matched]])
+    if explicit_basis:
+        with np.load(args.static.parent / 'bind_transforms.npz', allow_pickle=False) as bind:
+            transform = bind['camera_from_world']
+        scale = float(np.linalg.norm(transform[:3, 0]))
+        rotation = transform[:3, :3] / scale
+        if scale <= 0 or not np.allclose(rotation.T @ rotation, np.eye(3), atol=1e-6):
+            raise ValueError('Invalid explicit FBX mesh basis transform')
+        fitted = scale * (source_rest @ rotation.T) + transform[:3, 3]
+        errors = np.linalg.norm(fitted - target_rest[[target_indices[name] for name in matched]], axis=1)
+        fit = dict(scale=scale, rotation=rotation, translation=transform[:3, 3], errors=errors)
+    else:
+        fit = fit_proper_similarity(source_rest, target_rest[[target_indices[name] for name in matched]])
     max_error = float(np.max(fit["errors"]))
     if fit["scale"] <= 0 or max_error > 0.01:
         raise ValueError(f"FBX bind skeleton differs from target static: max error {max_error:.6f} m")
 
     all_vertices, all_faces, all_weights, all_uvs, all_materials = [], [], [], [], []
+    all_normals, all_smooth = [], []
+    uv_names = sorted({layer.name for obj in meshes for layer in obj.data.uv_layers})
+    uv_layers = {name: [] for name in uv_names}
+    exporter = MaterialExporter(args.output_dir)
+    material_records = []
     texture_files = []
     vertex_offset = 0
     for obj in meshes:
         data = obj.data
-        bm = bmesh.new()
-        bm.from_mesh(data)
-        bmesh.ops.triangulate(bm, faces=bm.faces[:])
-        bm.to_mesh(data)
-        bm.free()
-        data.update()
+        # Reading loop triangles preserves the FBX's corner normals and UV seams.
+        # Destructive bmesh triangulation can discard its custom split normals.
+        data.calc_loop_triangles()
+        normal_transform = fit["rotation"] @ np.linalg.inv(np.asarray(obj.matrix_world)[:3, :3]).T
+        corner_normals = np.asarray([normal.vector[:] for normal in data.corner_normals], dtype=np.float64)
+        corner_normals = corner_normals @ normal_transform.T
+        corner_normals /= np.maximum(np.linalg.norm(corner_normals, axis=1, keepdims=True), 1e-12)
         vertices = np.asarray([obj.matrix_world @ vertex.co for vertex in data.vertices], dtype=np.float64)
         vertices = fit["scale"] * (vertices @ fit["rotation"].T) + fit["translation"]
         weights = np.zeros((len(vertices), len(names)), dtype=np.float32)
@@ -131,18 +139,26 @@ def main() -> None:
         slots = list(data.materials)
         if not slots:
             slots = [None]
-        texture_files.extend(
-            copy_image(image_for_material(material), args.output_dir / "textures", material_offset + index)
-            for index, material in enumerate(slots)
-        )
+        for material in slots:
+            material_records.append(exporter.material(material))
+            base_image = exporter.image(image_for_material(material))
+            texture_files.append(base_image["path"] if base_image else "")
         uv_layer = data.uv_layers.active
-        for polygon in data.polygons:
-            if len(polygon.vertices) != 3:
-                raise ValueError("FBX triangulation failed")
-            all_faces.append([vertex_offset + int(v) for v in polygon.vertices])
+        mirrored = np.linalg.det(fit['rotation'] @ np.asarray(obj.matrix_world)[:3, :3]) < 0
+        for triangle in data.loop_triangles:
+            polygon = data.polygons[triangle.polygon_index]
+            loops = list(triangle.loops)
+            if mirrored:
+                loops.reverse()
+            all_faces.append([vertex_offset + data.loops[index].vertex_index for index in loops])
             all_materials.append(material_offset + min(int(polygon.material_index), len(slots) - 1))
-            for loop_index in polygon.loop_indices:
+            all_smooth.append(polygon.use_smooth)
+            for loop_index in loops:
+                all_normals.append(corner_normals[loop_index])
                 all_uvs.append(tuple(uv_layer.data[loop_index].uv) if uv_layer is not None else (0.0, 0.0))
+                for name in uv_names:
+                    layer = data.uv_layers.get(name)
+                    uv_layers[name].append(tuple(layer.data[loop_index].uv) if layer else (0.0, 0.0))
         all_vertices.append(vertices)
         all_weights.append(weights)
         vertex_offset += len(vertices)
@@ -159,6 +175,11 @@ def main() -> None:
             uvs=np.asarray(all_uvs, dtype=np.float32),
             face_material=np.asarray(all_materials, dtype=np.int32),
             texture_files=np.asarray(texture_files),
+            materials_json=np.asarray(json.dumps({"version": 1, "materials": material_records})),
+            corner_normals=np.asarray(all_normals, dtype=np.float32),
+            face_smooth=np.asarray(all_smooth, dtype=np.bool_),
+            uv_layer_names=np.asarray(uv_names, dtype=str),
+            uv_layers=np.asarray([uv_layers[name] for name in uv_names], dtype=np.float32),
             parents=parents,
             rest_translations=translations,
             rest_rotations_quat=quaternions,

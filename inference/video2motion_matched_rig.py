@@ -19,12 +19,10 @@ from utils.model_inputs import model_forward_inputs
 from utils.motion_metrics import topocap_protocol_metrics
 from utils.config_utils import instantiate_from_config, load_yaml_config
 from utils.config_validation import require_bool, require_positive_int
-from utils.render_skeleton_rgb_pose_compare import render_frame_sources
-from utils.motion_visualization import (
-    local_rotation_fk,
-    motion_output_dir,
-    video_output,
-)
+from visualization.render_skeleton_rgb_pose_compare import render_frame_sources
+from utils.fk_depth import local_rotation_fk
+from utils.motion_io import motion_output_dir
+from visualization.motion_visualization import video_output
 from utils.rotation import (
     project_rotmat_to_so3,
     rot6d_to_rotmat_tensor,
@@ -185,7 +183,6 @@ def _save_motion(output_dir, storage, validation_name, cfg, visualize):
                 storage["frame_sources"], gt_position, pred_position,
                 storage["parents"], [f"joint_{i}" for i in range(storage["joint_count"])],
                 output_video, fps=float(visual_cfg.get("fps", 30.0)),
-                elev=float(visual_cfg.get("elev", 18.0)), azim=float(visual_cfg.get("azim", 60.0)),
                 clip=storage["rel"], camera_root_position=storage["camera_root_position"],
                 camera_intrinsics=storage["camera_intrinsics"],
             )

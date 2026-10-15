@@ -4,6 +4,12 @@ __pycache__/
 *$py.class
 *.so
 *.pyd
+*.o
+*.obj
+*.dll
+*.lib
+*.exp
+*.pdb
 *.egg
 *.egg-info/
 dist/
@@ -20,6 +26,9 @@ lib64/
 
 # Virtual environments
 .env
+.env.*
+!.env.example
+!.env.template
 .venv
 env/
 venv/
@@ -45,6 +54,7 @@ coverage.xml
 *.cover
 .hypothesis/
 .pytest_cache/
+.ruff_cache/
 
 # MyPy
 .mypy_cache/
@@ -86,6 +96,7 @@ results/
 
 # Backbone sources and weights fetched by scripts/setup_backbones.sh.
 /third_party/
+/sam2/
 
 # Downloaded Mobjaverse assets are provided separately.
 /preprocess/mobjaverse/third_party/mobjaverse/
@@ -94,6 +105,46 @@ results/
 # Local performance diagnostics and machine-specific trial launchers.
 .torchinductor_cache/
 .torch_extensions
+.triton/
+torch_compile_debug/
+compile_cache/
+
+# Local datasets, downloaded weights, and preprocessing work directories.
+/datasets/
+/downloads/
+/weights/
+/work/
+/zoo-work/
+/mobjaverse-work/
+/mixamo-work/
+cache/
+
+# Generated arrays, source motion/mesh assets, and rendered videos.
+*.npy
+*.npz
+*.fbx
+*.bvh
+*.glb
+*.gltf
+*.blend
+*.blend[0-9]*
+# The bundled Blender render template is required by Zoo preprocessing.
+!/preprocess/zoo/third_party/preprocess/blank.blend
+*.mp4
+*.mov
+*.mkv
+*.avi
+*.webm
+
+# Dataset shards, downloaded archives, and interrupted output writes.
+*.tar
+*.tar.*
+*.tgz
+*.zip
+*.7z
+*.rar
+*.tmp
+*.bak
 
 demo*/
 runtime/

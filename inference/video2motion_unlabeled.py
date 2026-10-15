@@ -26,7 +26,7 @@ from data.cache_reader import (
     crop_rgb_by_mask,
 )
 from data.cache_formats import skeleton_id_from_static
-from utils.config_validation import require_int, require_positive_int
+from utils.config_validation import require_bool, require_int, require_positive_int
 from models.dinov3_infer import build_transform
 from utils.model_inputs import normalize_model_skeleton_inputs
 from utils.config_utils import instantiate_from_config, load_yaml_config
@@ -283,16 +283,21 @@ def static_conditioning(
     device,
     max_joints: int,
     valid_length=None,
+    *,
+    dynamic_max_joints=False,
 ):
+    max_joints = require_positive_int(max_joints, "max_joints")
+    dynamic_max_joints = require_bool(dynamic_max_joints, "dynamic_max_joints")
     static = np.load(static_path, allow_pickle=True).item()
     if static.get("coordinate_system") != CACHE_CAMERA_COORDINATE_SYSTEM or static.get("units") != "meters":
         raise ValueError("static.npy must use OpenCV camera coordinates in meters")
     metric_scale = np.asarray(static.get("metric_scale"), dtype=np.float32)
     if metric_scale.ndim != 0 or not np.isfinite(metric_scale) or metric_scale <= 0:
         raise ValueError("static.npy must contain a finite positive metric_scale")
-    joint_count = int(static["joints"])
+    joint_count = require_positive_int(static["joints"], "static.joints")
     if joint_count > max_joints:
         raise ValueError(f"Skeleton has {joint_count} joints, maximum is {max_joints}")
+    padded_joint_count = joint_count if dynamic_max_joints else max_joints
     parents = np.asarray(static["parents"], dtype=np.int64)
     if parents[0] != -1 or any(not (0 <= int(p) < j) for j, p in enumerate(parents[1:], 1)):
         raise ValueError("Skeleton must use root-0 parent-before-child order")
@@ -313,15 +318,15 @@ def static_conditioning(
     graph_hop, graph_edge, ancestor = graph_metadata(parents)
 
     def pad(array, value=0):
-        shape = (max_joints,) + array.shape[1:]
+        shape = (padded_joint_count,) + array.shape[1:]
         result = np.full(shape, value, dtype=array.dtype)
         result[:joint_count] = array
         return result
 
-    parent_pad = np.full((max_joints,), -1, dtype=np.int64)
+    parent_pad = np.full((padded_joint_count,), -1, dtype=np.int64)
     parent_pad[:joint_count] = parents
-    square_pad = lambda x: np.pad(x, ((0, max_joints-joint_count), (0, max_joints-joint_count)))
-    joint_mask = np.zeros((max_joints,), dtype=np.bool_)
+    square_pad = lambda x: np.pad(x, ((0, padded_joint_count-joint_count), (0, padded_joint_count-joint_count)))
+    joint_mask = np.zeros((padded_joint_count,), dtype=np.bool_)
     joint_mask[:joint_count] = True
     if valid_length is None:
         valid_length = image_window.shape[0]
@@ -337,7 +342,7 @@ def static_conditioning(
         "ancestor_mask": torch.from_numpy(square_pad(ancestor))[None],
         "graph_hop": torch.from_numpy(square_pad(graph_hop))[None],
         "graph_edge": torch.from_numpy(square_pad(graph_edge))[None],
-        "static_rot_joint_mask": torch.zeros(1, max_joints, dtype=torch.bool),
+        "static_rot_joint_mask": torch.zeros(1, padded_joint_count, dtype=torch.bool),
         "metric_scale": torch.tensor([float(metric_scale)], dtype=torch.float32),
         "ref_rot6d_a": torch.from_numpy(pad(reset_rot6d))[None],
         "offset_a": torch.from_numpy(pad(local_t))[None],
@@ -355,6 +360,10 @@ def run(args):
     window = require_positive_int(cfg["train"]["seq_len"], "train.seq_len")
     overlap = resolve_window_overlap(args.window_overlap, window)
     max_joints = require_positive_int(cfg["data"].get("max_joints"), "data.max_joints")
+    dynamic_max_joints = require_bool(
+        cfg["data"].get("dynamic_batch_max_joints", False),
+        "data.dynamic_batch_max_joints",
+    )
     metadata = video_metadata(args.input_video)
     source_frame_count = int(metadata["source_frame_count"])
     frame_count = min(source_frame_count, window) if overlap == -1 else source_frame_count
@@ -410,7 +419,14 @@ def run(args):
             device,
             valid_length=valid,
             max_joints=max_joints,
+            dynamic_max_joints=dynamic_max_joints,
         )
+        metadata["skeleton_conditioning"] = {
+            "joint_count": joint_count,
+            "padded_joint_count": int(batch["joint_mask"].shape[-1]),
+            "max_joints": max_joints,
+            "dynamic_batch_max_joints": dynamic_max_joints,
+        }
         if args.input_stride > 1:
             observed = torch.arange(
                 image_window.shape[0], device=device, dtype=torch.long
@@ -432,7 +448,7 @@ def run(args):
         raise RuntimeError("Sliding windows did not cover every input frame")
     mean_rotmat = torch.from_numpy(rot_sum / count[:, None, None, None]).float()
     rot = rotmat_to_rot6d_tensor(project_rotmat_to_so3(mean_rotmat)).numpy()
-    from utils.motion_visualization import motion_output_dir
+    from utils.motion_io import motion_output_dir
     prefix = Path(args.input_video).stem
     static = np.load(args.static, allow_pickle=True).item()
     args.output_dir = motion_output_dir(args.output_dir, skeleton_id_from_static(static), prefix)

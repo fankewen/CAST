@@ -338,6 +338,37 @@ def linear_blend_skinning(
     return output.astype(np.float32)
 
 
+def linear_blend_skinning_normals(
+    bind_normals: np.ndarray,
+    corner_vertex_indices: np.ndarray,
+    weights: np.ndarray,
+    joint_delta: np.ndarray,
+) -> np.ndarray:
+    """Deform split normals for one frame using inverse-transpose blended matrices.
+
+    Work one frame at a time: storing all [T,V,3,3] matrices for a long clip
+    would cost substantially more memory than the vertex animation itself.
+    """
+    normals = np.asarray(bind_normals, dtype=np.float64)
+    indices = np.asarray(corner_vertex_indices, dtype=np.int64)
+    weights = np.asarray(weights, dtype=np.float64)
+    delta = np.asarray(joint_delta, dtype=np.float64)
+    if normals.shape != (len(indices), 3) or delta.shape != (weights.shape[1], 4, 4):
+        raise ValueError("Normal/skin deformation shapes differ")
+    if np.any(indices < 0) or np.any(indices >= len(weights)):
+        raise ValueError("Normal corner vertex indices are out of range")
+    matrices = np.einsum("vj,jxy->vxy", weights, delta[:, :3, :3])
+    # A weighted mixture of opposing joint rotations can be singular. pinv
+    # supplies a finite least-squares inverse for that case.
+    inverse = np.linalg.pinv(matrices)
+    deformed = np.einsum("vji,vj->vi", inverse[indices], normals)
+    lengths = np.linalg.norm(deformed, axis=1, keepdims=True)
+    collapsed = lengths[:, 0] < 1e-12
+    deformed[collapsed] = normals[collapsed]
+    lengths[collapsed] = np.linalg.norm(normals[collapsed], axis=1, keepdims=True)
+    return (deformed / np.maximum(lengths, 1e-12)).astype(np.float32)
+
+
 def load_mesh_asset(path: str | Path) -> dict[str, np.ndarray]:
     with np.load(path, allow_pickle=False) as archive:
         return {key: np.array(archive[key], copy=True) for key in archive.files}

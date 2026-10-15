@@ -1,34 +1,17 @@
 # CAST: Real-Time Motion Capture for Any Skeleton Topology
 
-Pu Pang, Zhongfei Qing, Ling-Hao Chen, Songnan Li, Hua Huang, and Bo Hu.
+Anonymous Authors — under review.
 
-[Installation](docs/installation.md) · [Model Weights](#model-weights) · [Inference](#inference) · [Evaluation](#evaluation)
+[Project Page](https://cast-mocap.github.io/) · [Installation](docs/installation.md) · [Model Weights](#model-weights) · [Evaluation](#evaluation) · [Inference](#inference) · [Blender](#blender) · [Training](#training)
 
 ![CAST teaser](assets/teaser.png)
 
 *CAST animates four target skeletons (left) from each of seven input clips (top).*
 
-CAST recovers motion from monocular RGB video and transfers it to a target
-skeleton, including skeleton topologies that differ from the subject in the
-video. It combines learned joint rotations with GRACE (Gated Rotation Alignment
-and CorrEction), which corrects composed orientations using predicted global
-bone directions.
-
-This release provides pretrained checkpoints, inference and rendering code,
-and evaluation tools. Start with [Installation](docs/installation.md), download
-a checkpoint from [Model Weights](#model-weights), and follow
-[Inference](#inference) to animate a target character from a video.
-
-## Release Plan / TODO
-
-- [x] Release the CAST-B and CAST-L checkpoints listed below, including the
-  DINOv2/DINOv3 and without-GRACE variants.
-- [x] Release offline video-to-motion inference and mesh rendering.
-- [x] Release matched-rig and cross-skeleton evaluation tools and cache preparation.
-- [ ] Release the training code and reproducible training instructions.
-- [ ] Release the causal and motion-completion model configurations and checkpoints.
-- [ ] Release the Blender live-capture addon and its real-time inference workflow.
-- [ ] Add an end-to-end example for preparing a new skinned FBX and running inference.
+CAST captures motion from RGB video for target skeletons with different topologies.
+It uses GRACE (Gated Rotation Alignment and CorrEction) for topology-aware
+analytic rotation correction. This repository contains the CAST training and
+inference code, together with a Blender addon for live capture.
 
 ## Installation
 
@@ -51,7 +34,8 @@ and [Mixamo](preprocess/mixamo/README.md) to build their caches.
 
 ## Model Weights
 
-Download the CAST checkpoint and use its matching configuration:
+CAST is available in two model families, CAST-B and CAST-L. Download the
+checkpoint for your backbone and GRACE setting and use its matching configuration:
 
 | Model | Configuration | Checkpoint |
 | --- | --- | --- |
@@ -124,6 +108,59 @@ bash scripts/inference_video2motion.sh
 
 The script extracts the mesh, predicts its motion, and writes the rendered video
 to `results/inference/<model>/<skeleton>/<video-name>/visualization.mp4`.
+
+For a new skinned FBX without an existing cache, generate its inference assets:
+
+```bash
+python -m utils.convert_fbx_to_cast --source character.fbx \
+  --blender /path/to/blender --output-dir results/character_asset
+```
+
+This reads the FBX's declared axes, handedness and `UnitScaleFactor`, converts
+both world and bone-local bases to OpenCV coordinates in meters, and extracts
+`static.npy` and `mesh_asset.npz`. Rest transforms come from FBX BindPose or skin
+cluster matrices; unskinned helpers use declared rest transforms with animation
+disabled. The source root and all bones are retained. `skeleton.json` records
+the source declarations, conversion matrices and rest provenance. Keep
+`bind_transforms.npz` beside `static.npy` when rebuilding this mesh. A rig must
+have one root; multiple roots or incomplete axis declarations produce an error
+instead of an automatic hierarchy change or guessed coordinate system.
+
+## Blender
+
+The CAST Live addon runs video-driven motion capture inside
+Blender. It starts a separate Python engine for CAST and SAM inference, imports
+a character from FBX, GLB, or a Blender scene, and applies predicted rotations
+to its armature.
+
+Load the weights, import a character with a single armature, and run a video.
+Playback uses the armature prepared during import, including in scenes with
+other rigs. See the [Blender guide](blender/README.md) for installation, model
+setup, and controls.
+
+## Training
+
+Training reads the RGB/mask caches from
+[Dataset Preprocessing](#dataset-preprocessing). Set their
+`data.sources.*.dataset_root`, the [DINO backbone](docs/installation.md#backbone-assets)
+paths, and `output.checkpoint_root` in the model configuration, then run:
+
+```bash
+bash scripts/train_video2motion.sh
+```
+
+`CONFIG` selects the configuration (default
+`configs/experiment/CAST_B_dinov3.yaml`), `GPUS` the visible devices, `PYTHON_BIN`
+the interpreter, and `RESUME_FROM_CHECKPOINT` resumes an interrupted run.
+Without it, training starts from `train.init_from_checkpoint`. Logs are appended
+to `logs/`.
+
+The five configurations listed under [Model Weights](#model-weights) are the
+training recipes for the released checkpoints.
+`configs/experiment/CAST_L_dinov3_causal.yaml` is the frame-wise causal
+fine-tune used by the live Blender engine.
+`configs/experiment/CAST_B_dinov3_mask_completion.yaml` is the mask-completion
+variant.
 
 ## License
 

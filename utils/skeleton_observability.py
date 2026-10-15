@@ -9,14 +9,7 @@ DEFAULT_EDGE_EPSILON = 1e-6
 
 
 def resolve_edge_epsilon(cfg=None):
-    """Return the shared rest-edge observability epsilon.
-
-    Algorithm-1 components (observability catalog, virtual-anchor builder,
-    BoneDirectionHead, virtual solver and loss/eval) must use the same
-    epsilon when deciding whether a rest bone is non-degenerate.  The default
-    lives here; callers may later override it through ``cfg`` without
-    forking constants across modules.
-    """
+    """Return the finite, positive threshold for nonzero rest-bone lengths."""
     if cfg is None:
         return float(DEFAULT_EDGE_EPSILON)
     model_params = cfg.get("model", {}).get("params", {})

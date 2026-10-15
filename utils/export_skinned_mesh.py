@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Prepare one inference mesh from an original character FBX or Mobjaverse NPZ."""
+"""Export a skinned render mesh from a character FBX or Mobjaverse NPZ."""
 
 from __future__ import annotations
 
@@ -101,7 +101,7 @@ def build_mobj(source: Path, static: dict, output_dir: Path) -> None:
 def build_fbx(source: Path, static_path: Path, output_dir: Path, blender: Path) -> None:
     if not blender.is_file():
         raise FileNotFoundError(f"Blender executable: {blender}")
-    worker = Path(__file__).with_name("extract_mesh_asset_fbx_blender.py")
+    worker = Path(__file__).with_name("blender_extract_fbx_mesh.py")
     subprocess.run(
         [str(blender), "-b", "--python-exit-code", "1", "--python", str(worker), "--",
          "--fbx", str(source), "--static", str(static_path), "--output-dir", str(output_dir)],

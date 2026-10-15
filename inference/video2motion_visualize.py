@@ -10,12 +10,11 @@ if __package__ in (None, ""):
 from data.cache_formats import skeleton_id_from_static
 from inference.video2motion_unlabeled import center_crop_box, iter_video_rgb, video_metadata
 from utils.rotation import rot6d_to_rotmat_tensor
-from utils.motion_visualization import (
-    local_rotation_fk,
-    motion_output_dir,
+from utils.fk_depth import local_rotation_fk
+from utils.motion_io import motion_output_dir, write_unlabeled_motion_npz
+from visualization.motion_visualization import (
     video_output,
     render_unlabeled_video,
-    write_unlabeled_motion_npz,
 )
 
 def required_file(path: Path) -> Path:

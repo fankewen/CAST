@@ -1,219 +1,20 @@
-"""Motion visualization for labeled validation and unlabeled RGB inference.
+"""Render driven-mesh comparisons and manage visualization video output.
 
-Share FK, skeleton panels, driven-mesh rendering, and per-motion output handling.
 Unlabeled overlays use a weak-perspective fit without camera calibration.
 """
 
 from __future__ import annotations
 
 from contextlib import contextmanager
-from urllib.parse import quote
-import io
 import json
 import shutil
 import subprocess
 import sys
 import tempfile
 import os
-import tarfile
 from pathlib import Path
-from typing import Sequence
 
 import numpy as np
-import torch
-from PIL import Image
-
-
-def local_rotation_fk(
-    local_rotation: np.ndarray,
-    rest_offset: np.ndarray,
-    parents: np.ndarray,
-    fixed_root_rotation: np.ndarray | None = None,
-) -> np.ndarray:
-    """Build root-centered positions from root-global/child-local rotations.
-
-    Joint zero contains the predicted camera/global root rotation, which
-    ``fixed_root_rotation`` replaces when it is supplied.
-    """
-    local_rotation = np.asarray(local_rotation, dtype=np.float32)
-    rest_offset = np.asarray(rest_offset, dtype=np.float32)
-    parents = np.asarray(parents, dtype=np.int64)
-    if local_rotation.ndim != 4 or local_rotation.shape[-2:] != (3, 3):
-        raise ValueError(f"local_rotation must be [T,J,3,3], got {local_rotation.shape}")
-    frames, joints = local_rotation.shape[:2]
-    if rest_offset.shape != (joints, 3) or parents.shape != (joints,):
-        raise ValueError("rest_offset/parents do not match rotation joint count")
-    if fixed_root_rotation is not None:
-        fixed_root_rotation = np.asarray(fixed_root_rotation, dtype=np.float32)
-        if fixed_root_rotation.shape != (3, 3):
-            raise ValueError("fixed_root_rotation must be [3,3]")
-    if parents[0] != -1 or any(not (0 <= int(p) < j) for j, p in enumerate(parents[1:], 1)):
-        raise ValueError("parents must be root-0, parent-before-child order")
-
-    position = np.zeros((frames, joints, 3), dtype=np.float32)
-    global_rotation = np.zeros((frames, joints, 3, 3), dtype=np.float32)
-    global_rotation[:, 0] = (
-        local_rotation[:, 0]
-        if fixed_root_rotation is None
-        else fixed_root_rotation
-    )
-    for joint in range(1, joints):
-        parent = int(parents[joint])
-        position[:, joint] = position[:, parent] + np.einsum(
-            "tij,j->ti", global_rotation[:, parent], rest_offset[joint]
-        )
-        global_rotation[:, joint] = (
-            global_rotation[:, parent] @ local_rotation[:, joint]
-        )
-    return position
-
-
-def _view_coordinates(position: np.ndarray) -> np.ndarray:
-    """Stable oblique orthographic view; preserve source Y-down convention."""
-    x, y, z = position[..., 0], position[..., 1], position[..., 2]
-    return np.stack((0.8660254 * x - 0.5 * z, y + 0.18 * z), axis=-1)
-
-
-def _projection_bounds(gt_position: np.ndarray, pred_position: np.ndarray) -> tuple[np.ndarray, float]:
-    points = np.concatenate(
-        (_view_coordinates(gt_position).reshape(-1, 2), _view_coordinates(pred_position).reshape(-1, 2)),
-        axis=0,
-    )
-    minimum = points.min(axis=0)
-    maximum = points.max(axis=0)
-    center = (minimum + maximum) * 0.5
-    half_range = max(float((maximum - minimum).max()) * 0.58, 1e-4)
-    return center, half_range
-
-
-def _draw_skeleton_panel(
-    position: np.ndarray,
-    parents: np.ndarray,
-    center: np.ndarray,
-    half_range: float,
-    panel_size: int,
-    title: str,
-    color: tuple[int, int, int],
-) -> np.ndarray:
-    import cv2
-
-    canvas = np.full((panel_size, panel_size, 3), 248, dtype=np.uint8)
-    point = _view_coordinates(position)
-    scale = (panel_size * 0.78) / (2.0 * half_range)
-    pixel = np.empty_like(point)
-    pixel[:, 0] = (point[:, 0] - center[0]) * scale + panel_size * 0.5
-    pixel[:, 1] = (point[:, 1] - center[1]) * scale + panel_size * 0.54
-    pixel = np.rint(pixel).astype(np.int32)
-    for joint in range(1, len(parents)):
-        parent = int(parents[joint])
-        cv2.line(canvas, tuple(pixel[parent]), tuple(pixel[joint]), color, 2, cv2.LINE_AA)
-    for joint, coordinate in enumerate(pixel):
-        joint_color = (20, 20, 220) if joint == 0 else color
-        cv2.circle(canvas, tuple(coordinate), 3 if joint == 0 else 2, joint_color, -1, cv2.LINE_AA)
-    cv2.putText(canvas, title, (16, 34), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (25, 25, 25), 2, cv2.LINE_AA)
-    cv2.putText(
-        canvas,
-        "root-centered FK",
-        (16, panel_size - 18),
-        cv2.FONT_HERSHEY_SIMPLEX,
-        0.48,
-        (90, 90, 90),
-        1,
-        cv2.LINE_AA,
-    )
-    return canvas
-
-
-def render_rotation_comparison_video(
-    frame_sources: Sequence[tuple[str, str]],
-    gt_position: np.ndarray,
-    pred_position: np.ndarray,
-    parents: np.ndarray,
-    output_path: str,
-    fps: float,
-    panel_size: int = 512,
-) -> None:
-    """Write ``original RGB | GT FK | predicted FK`` as an MP4."""
-    import cv2
-
-    frame_count = len(frame_sources)
-    if frame_count == 0 or gt_position.shape[0] != frame_count or pred_position.shape[0] != frame_count:
-        raise ValueError("RGB, GT, and prediction must have the same nonzero frame count")
-    if not np.isfinite(fps) or fps <= 0:
-        raise ValueError(f"fps must be positive and finite, got {fps}")
-    if panel_size < 64:
-        raise ValueError(f"panel_size must be at least 64, got {panel_size}")
-    Path(output_path).parent.mkdir(parents=True, exist_ok=True)
-    temporary_path = str(Path(output_path).with_suffix(f".tmp.{os.getpid()}.mp4"))
-    writer = cv2.VideoWriter(
-        temporary_path,
-        cv2.VideoWriter_fourcc(*"mp4v"),
-        float(fps),
-        (panel_size * 3, panel_size),
-    )
-    if not writer.isOpened():
-        raise RuntimeError("OpenCV could not initialize the mp4v video writer")
-
-    center, half_range = _projection_bounds(gt_position, pred_position)
-    archives: dict[str, tarfile.TarFile] = {}
-    try:
-        for frame, (tar_path, member_name) in enumerate(frame_sources):
-            archive = archives.get(tar_path)
-            if archive is None:
-                archive = tarfile.open(tar_path, "r")
-                archives[tar_path] = archive
-            file_obj = archive.extractfile(archive.getmember(member_name))
-            if file_obj is None:
-                raise FileNotFoundError(f"Cannot extract {tar_path}:{member_name}")
-            with Image.open(io.BytesIO(file_obj.read())) as image:
-                rgb = np.asarray(image.convert("RGB"))
-            left = _letterbox_bgr(rgb, panel_size, "Original RGB", font_scale=0.8)
-            middle = _draw_skeleton_panel(
-                gt_position[frame], parents, center, half_range, panel_size, "GT skeleton", (40, 155, 40)
-            )
-            right = _draw_skeleton_panel(
-                pred_position[frame], parents, center, half_range, panel_size, "Pred skeleton", (220, 115, 25)
-            )
-            writer.write(np.concatenate((left, middle, right), axis=1))
-    finally:
-        writer.release()
-        for archive in archives.values():
-            archive.close()
-    if not os.path.isfile(temporary_path) or os.path.getsize(temporary_path) == 0:
-        raise RuntimeError("Validation visualization video is empty")
-    os.replace(temporary_path, output_path)
-
-
-def rotation_matrices_from_fused_sum(rotation_sum: np.ndarray, count: np.ndarray) -> np.ndarray:
-    """Project overlap-averaged matrices back to proper SO(3) on CPU."""
-    from utils.rotation import project_rotmat_to_so3
-
-    if np.any(count == 0):
-        raise ValueError(f"Incomplete visualization coverage: {np.flatnonzero(count == 0)[:10].tolist()}")
-    matrix = torch.from_numpy(rotation_sum / count[:, None, None, None]).float()
-    return project_rotmat_to_so3(matrix).numpy()
-
-
-def component(value):
-    value = str(value)
-    if not value or value in {".", ".."}:
-        raise ValueError(f"Invalid output component: {value!r}")
-    result = quote(value, safe="-_.() ")
-    # Windows forbids trailing spaces/dots; encode them without aliasing names.
-    body = result.rstrip(" .")
-    tail = result[len(body):].replace(" ", "%20").replace(".", "%2E")
-    return body + tail
-
-
-def motion_output_dir(output_root, skeleton_id, motion):
-    """Keep validation-source roots, then exactly skeleton/animation folders."""
-    skeleton_id = str(skeleton_id)
-    motion = str(motion).replace("\\", "/")
-    if motion.startswith(skeleton_id + "/"):
-        motion = motion[len(skeleton_id) + 1:]
-    target = Path(output_root) / component(skeleton_id) / component(motion)
-    target.mkdir(parents=True, exist_ok=True)
-    return target
 
 
 @contextmanager
@@ -261,62 +62,6 @@ def weak_perspective_pixels(
     scale = fit_fraction * min((right - left) / extent[0], (bottom - top) / extent[1])
     target_center = np.asarray([(left + right) * 0.5, (top + bottom) * 0.5])
     return ((xy - center) * scale + target_center).astype(np.float32)
-
-
-def write_unlabeled_motion_npz(
-    output_path: str | Path,
-    *,
-    checkpoint_path: str | Path,
-    skeleton_id: str,
-    sequence: str,
-    static: dict,
-    fps: float,
-    rotation_matrix: np.ndarray,
-    fk_position: np.ndarray,
-) -> None:
-    """Save lossless in-place motion without fabricating camera calibration."""
-    output_path = Path(output_path)
-    rotation = np.asarray(rotation_matrix, dtype=np.float32)
-    fk = np.asarray(fk_position, dtype=np.float32)
-    parents = np.asarray(static["parents"], dtype=np.int32)
-    if rotation.ndim != 4 or rotation.shape[1:] != (len(parents), 3, 3):
-        raise ValueError(f"rotation_matrix has invalid shape {rotation.shape}")
-    if fk.shape != rotation.shape[:2] + (3,):
-        raise ValueError(f"fk_position has invalid shape {fk.shape}")
-    if not np.isfinite(rotation).all() or not np.isfinite(fk).all():
-        raise ValueError("Motion contains NaN/Inf")
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    staged = output_path.with_suffix(output_path.suffix + ".staged")
-    with staged.open("wb") as file:
-        np.savez_compressed(
-            file,
-            version=np.asarray(1, dtype=np.int32),
-            checkpoint=np.asarray(str(checkpoint_path)),
-            skeleton_id=np.asarray(str(skeleton_id)),
-            source_fbx=np.asarray(str(static.get("source_fbx", ""))),
-            source_cache=np.asarray(str(static.get("boundary_pruning", {}).get("source", ""))),
-            sequence=np.asarray(str(sequence)),
-            skeleton_hash=np.asarray(str(static["skeleton_hash"])),
-            fps=np.asarray(float(fps), dtype=np.float32),
-            frame_count=np.asarray(rotation.shape[0], dtype=np.int32),
-            coordinate_system=np.asarray("opencv_right_handed_ydown_zforward_meters"),
-            units=np.asarray("meters"),
-            joint_names=np.asarray([str(name) for name in static["joint_names"]]),
-            parents=parents,
-            rest_translations=np.asarray(static["rest_translations"], dtype=np.float32),
-            rest_rotations_quat_xyzw=np.asarray(
-                static["rest_rotations_quat"], dtype=np.float32
-            ),
-            pred_local_rotation_matrix=rotation,
-            pred_fk_position=fk,
-            pred_root_translation=np.zeros((rotation.shape[0], 3), dtype=np.float32),
-            has_predicted_root_translation=np.asarray(False),
-            camera_intrinsics_available=np.asarray(False),
-            projection_semantics=np.asarray(
-                "root_centered_camera_axes; visualization_uses_orthographic_camera"
-            ),
-        )
-    os.replace(staged, output_path)
 
 
 def _letterbox_bgr(
@@ -416,7 +161,7 @@ def render_textured_mesh_frames(
     )
     command = [
         sys.executable,
-        str(repo_root / "utils" / renderer_script),
+        str(Path(__file__).resolve().with_name(renderer_script)),
         "--mesh-path", str(mesh_path),
         "--motion", str(motion_path),
         "--output-dir", str(output_dir),

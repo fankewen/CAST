@@ -1,0 +1,79 @@
+model_family: CAST-B
+data:
+  max_joints: 150
+  image_size: 256
+  dynamic_batch_max_joints: true
+  graph_attention_auto_group_max_pair_ratio: 0.8
+model:
+  params:
+    auxiliary_pose_detach_features: false
+    auxiliary_pose_head: true
+    bone_direction_head_cfg:
+      params:
+        confidence_bias: -4.0
+        feature_dim: 768
+        hidden_dim: 256
+      target: models.base_model.bone_direction_head.BoneDirectionHead
+    image_backbone_cfg:
+      params:
+        include_cls_token: true
+        micro_batch_size: 324
+        compile_backbone: true
+        compile_cache_dir: ${TORCHINDUCTOR_CACHE_DIR}
+        repo: ${CAST_DINOV3_REPO}
+        weights: ${CAST_DINOV3_WEIGHTS}
+      target: models.frozen_dinov3.FrozenDinoV3Encoder
+    decoder_cfg:
+      params:
+        decoder_layers: 8
+        decoder_rest_film: true
+        dual_global_pool: 2
+        dual_local_window: 4
+        external_query_dim: 768
+        num_heads: 8
+        predict_residual_rotation: true
+        q_dim: 256
+        rest_layers: 6
+        rotation_representation: rot6d
+        temporal_dropout: 0.05
+        temporal_mode: global
+        temporal_window: null
+        use_grad_checkpoint: true
+        causal: true
+        causal_chunk_size: 1
+      target: models.decoder.model.Decoder
+    grace_cfg:
+      params:
+        feature_dim: 768
+        fixed_gate_scale: 1.0
+        gate_hidden_dim: 256
+        gate_mode: visual
+        max_child_count: 4
+        visual_gate_bias: -4.0
+        visual_gate_chunk_tokens: 4096
+        visual_gate_checkpoint_chunks: true
+      target: models.grace.observability_rotation_correction.GRACE
+    grace_source: bone_direction
+    rotation_query_source: video_features
+    encoder_cfg:
+      params:
+        concat_last_stage_features: true
+        dropout: 0.05
+        dual_global_pool: 2
+        dual_local_window: 4
+        img_dim: 1024
+        num_heads: 8
+        num_joints: 150
+        num_layers: 8
+        output_mode: features
+        q_dim: 256
+        ref_layers: 6
+        temporal_mode: global
+        temporal_window: null
+        use_checkpoint: true
+        use_graph_ref_inner: true
+        use_graph_temporal_inner: true
+        causal: true
+        causal_chunk_size: 1
+      target: models.encoder.model.Encoder
+  target: models.base_model.model.BaseModel

@@ -1,8 +1,8 @@
 # CAST: Real-Time Motion Capture for Any Skeleton Topology
 
-Anonymous Authors — under review.
+Pu Pang, Zhongfei Qing, Ling-Hao Chen, Songnan Li, Hua Huang, and Bo Hu.
 
-[Project Page](https://cast-mocap.github.io/) · [Installation](docs/installation.md) · [Model Weights](#model-weights) · [Evaluation](#evaluation) · [Inference](#inference) · [Blender](#blender) · [Training](#training)
+[Installation](docs/installation.md) · [Model Weights](#model-weights) · [Evaluation](#evaluation) · [Inference](#inference) · [Blender](#blender) · [Training](#training)
 
 ![CAST teaser](assets/teaser.png)
 
@@ -137,6 +137,12 @@ Load the weights, import a character with a single armature, and run a video.
 Playback uses the armature prepared during import, including in scenes with
 other rigs. See the [Blender guide](blender/README.md) for installation, model
 setup, and controls.
+
+For inference on a GPU server, see the [remote service guide](blender/remote/README.md).
+It provides an HTTP API, a management console, and Blender client utilities,
+using the same model and inference code as this checkout. Both live workflows
+require a matching frame-wise causal checkpoint; the five offline checkpoints
+listed above are not live-streaming weights.
 
 ## Training
 

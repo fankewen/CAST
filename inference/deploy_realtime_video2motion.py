@@ -170,6 +170,7 @@ class RealtimeVideo2Motion:
         compile_warmup: int = 3,
         compile_cache_dir: str = "/path/to/cache/cast_realtime_compile",
         use_cudagraphs: bool = False,
+        checkpoint_weights_only: bool = False,
     ):
         self.device = torch.device(device)
         if self.device.type != "cuda":
@@ -198,7 +199,9 @@ class RealtimeVideo2Motion:
         torch.backends.cudnn.benchmark = True
 
         self.model = instantiate_from_config(self.cfg["model"])
-        checkpoint_data = torch.load(checkpoint, map_location="cpu", weights_only=False)
+        checkpoint_data = torch.load(
+            checkpoint, map_location="cpu", weights_only=checkpoint_weights_only
+        )
         self.model.load_trainable_state_dict(checkpoint_data["model_state"])
         self.model.to(self.device).eval().to(dtype=self.neural_dtype)
         if self.model.grace is not None:

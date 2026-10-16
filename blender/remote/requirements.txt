@@ -1,0 +1,20 @@
+# Install torch/torchvision from the cu128 index first; see tools/install.sh.
+numpy==1.26.4
+PyYAML==6.0.3
+scipy==1.11.4
+tqdm==4.67.1
+tensorboard==2.20.0
+opencv-python-headless==4.11.0.86
+Pillow==12.3.0
+matplotlib==3.7.3
+einops==0.8.1
+hydra-core==1.3.2
+iopath==0.1.10
+fastapi==0.115.12
+uvicorn==0.34.2
+httpx==0.28.1
+ninja==1.13.0
+packaging==25.0
+setuptools==80.9.0
+h11==0.16.0
+pydantic==2.13.5

@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>CAST · Operations</title><link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+<div id="loginView" class="login-view">
+  <div class="login-art"><div class="brand-symbol">✳</div><div class="eyebrow">CAST / OPERATIONS</div><h1>让每一帧，<br>都清晰可见。</h1><p>实时动捕服务的只读观测空间。<br>状态、资源、日志与历史，在同一个地方。</p><div class="art-grid"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="art-bottom">DINOv3 · CUDA · Portable deployment</div></div>
+  <div class="login-form-wrap"><form id="loginForm"><div class="eyebrow">WELCOME BACK</div><h2>管理员登录</h2><p class="muted">使用独立管理员凭据，不是 SSH 密码或动捕 API Key。</p><label>用户名<input id="username" autocomplete="username" value="admin" required maxlength="80"></label><label>密码<input id="password" type="password" autocomplete="current-password" required maxlength="200"></label><div id="loginError" class="error-text" role="alert"></div><button class="primary" type="submit" id="loginButton">进入控制台 <span>↗</span></button><p class="login-foot">只读监控 · 不会启动、重置或抢占动捕会话<br>内网 HTTP；外部访问请使用 HTTPS 或 SSH 隧道。</p></form></div>
+</div>
+<div id="appView" class="app hidden">
+  <aside class="sidebar">
+    <a class="brand" href="/"><span class="brand-symbol small">✳</span><span>CAST<small>Operations console</small></span></a>
+    <div class="nav-caption">WORKSPACE</div>
+    <nav id="navigation">
+      <button class="nav-item active" data-page="overview"><span>◫</span>服务概览</button>
+      <button class="nav-item" data-page="history"><span>⌁</span>监控历史</button>
+      <button class="nav-item" data-page="logs"><span>≡</span>实时日志<span id="navAlert" class="nav-dot hidden"></span></button>
+      <button class="nav-item" data-page="live" title="实时图片历史"><span>▧</span>实时图片历史</button>
+      <button class="nav-item" data-page="visuals" title="离线样本"><span>▦</span>离线样本</button>
+      <button class="nav-item" data-page="benchmarks"><span>▥</span>历史测速</button>
+      <button class="nav-item" data-page="instance"><span>⚙</span>实例信息</button>
+    </nav>
+    <div class="side-card"><span class="tiny-dot"></span> READ-ONLY MODE<p>安全地观察。<br>不干预正在发生的动捕。</p></div>
+    <div class="sidebar-bottom"><div class="avatar">A</div><div>Administrator<small>会话有效期 8 小时</small></div><button id="logout" title="退出登录" aria-label="退出登录">↪</button></div>
+  </aside>
+  <div class="main">
+    <header class="topbar"><div class="breadcrumb">Workspace <span>/</span> <strong id="breadcrumb">服务概览</strong></div><div class="header-right"><span id="refreshLabel" class="muted">等待首个采样</span><button id="refresh" class="icon-button" title="刷新" aria-label="刷新">↻</button><span class="pill neutral">OPERATIONS</span><button id="logoutTop" class="icon-button" title="退出登录" aria-label="退出登录">↪</button></div></header>
+    <main>
+      <div id="globalError" class="notice error hidden" role="alert"></div>
+      <section id="page-overview" class="page">
+        <div class="page-title"><div><div class="eyebrow">LIVE WORKSPACE</div><h1>服务概览<span class="title-dot">.</span></h1><p>从一张图片，到一段动作。关注服务真正发生的事。</p></div><div id="serviceBadge" class="pill neutral">加载中</div></div>
+        <div class="notice warm"><span>ⓘ</span><div><strong>实时吞吐尚未接入</strong><p>当前推理服务 没有持续上报完成帧计数与逐帧延迟；这里不会把历史测速或健康检查耗时当作实时 FPS。</p></div></div>
+        <div class="metric-grid">
+          <article class="metric"><div class="metric-label">动捕服务 <span>↗</span></div><div class="metric-value" id="serviceValue">—</div><div class="metric-foot" id="serviceFoot">等待健康检查</div></article>
+          <article class="metric"><div class="metric-label">GPU 使用率 <span>◇</span></div><div class="metric-value" id="gpuValue">—</div><div class="metric-foot" id="gpuFoot">NVIDIA CUDA GPU · 整卡指标</div></article>
+          <article class="metric"><div class="metric-label">推理服务已建立连接 <span>⇄</span></div><div class="metric-value" id="connValue">—</div><div id="connFoot" class="metric-foot">连接限制与流水线占用加载中</div></article>
+          <article class="metric"><div class="metric-label">实时动捕 FPS <span>⌁</span></div><div class="metric-value unavailable">未接入</div><div class="metric-foot">需新增服务端帧计数遥测</div></article>
+        </div>
+        <div class="overview-grid">
+          <article class="card chart-card"><div class="card-head"><div><h2>资源趋势</h2><p>最近一小时 · 每 5 秒采样</p></div><div class="legend"><span class="legend-gpu">GPU %</span><span class="legend-cpu">CPU %</span></div></div><div class="chart-wrap"><canvas id="overviewChart" aria-label="GPU 与 CPU 历史趋势"></canvas><div id="overviewEmpty" class="chart-empty hidden">历史从管理员监控启动时开始积累</div></div><div class="chart-caption"><span id="chartRange">等待采样</span><span>主机指标包含其他任务</span></div></article>
+          <article class="card resource-card"><div class="card-head"><div><h2>实例资源</h2><p>当前实例 GPU</p></div><span class="mini-symbol">✳</span></div><div class="resource-row"><div>显存 <strong id="vramText">—</strong></div><progress id="vramBar" max="100" value="0"></progress></div><div class="resource-row"><div>主机内存 <strong id="ramText">—</strong></div><progress id="ramBar" max="100" value="0"></progress></div><dl class="details"><div><dt>GPU 温度 / 功耗</dt><dd id="gpuThermal">—</dd></div><div><dt>CAST CPU（单核基准）</dt><dd id="processCpu">—</dd></div><div><dt>CAST RSS</dt><dd id="processMem">—</dd></div><div><dt>进程运行时间</dt><dd id="processUptime">—</dd></div><div><dt>健康探测 RTT <small>非推理</small></dt><dd id="probeTime">—</dd></div></dl></article>
+        </div>
+        <div class="overview-grid bottom-grid">
+          <article class="card"><div class="card-head"><div><h2>告警与变化</h2><p>采集时间线 · 不追溯无时间戳日志的发生时间</p></div><button class="text-button" data-open="history">查看全部 ↗</button></div><div id="alerts" class="events-list"></div></article>
+          <article class="card"><div class="card-head"><div><h2>日志观察计数</h2><p>启动扫描 + 本次监控新增，非每秒速率</p></div><button class="text-button" data-open="logs">打开日志 ↗</button></div><div class="log-counts"><div><strong id="concurrencyCount">—</strong><span>并发超限</span></div><div><strong id="warningCount">—</strong><span>WARNING 行</span></div><div><strong id="errorCount">—</strong><span>ERROR / traceback 行</span></div></div><p class="subtle-note">计数可能包含安装时期的历史错误。请结合日志内容与采集时间判断，不能等同于当前请求失败数。</p></article>
+        </div>
+      </section>
+      <section id="page-history" class="page hidden">
+        <div class="page-title"><div><div class="eyebrow">OBSERVABILITY / HISTORY</div><h1>把变化留下来<span class="title-dot">.</span></h1><p>资源采样与状态事件保留 7 天；监控启动前的数据不会补造。</p></div><select id="historyRange" aria-label="历史时间范围"><option value="60">最近 1 小时</option><option value="360">最近 6 小时</option><option value="1440">最近 24 小时</option><option value="10080">最近 7 天</option></select></div>
+        <div class="card chart-card"><div class="card-head"><div><h2>GPU / CPU 资源趋势</h2><p id="historyMeta">等待历史数据</p></div><div class="legend"><span class="legend-gpu">GPU %</span><span class="legend-cpu">CPU %</span></div></div><div class="chart-wrap large"><canvas id="historyChart"></canvas></div></div>
+        <div class="card history-events"><div class="card-head"><div><h2>事件时间线</h2><p>登录、服务状态变化、进程变化与新增告警</p></div><select id="eventLevel"><option value="all">全部级别</option><option value="error">错误</option><option value="warning">警告</option><option value="info">信息</option></select></div><div id="historyEvents" class="events-list"></div></div>
+      </section>
+      <section id="page-logs" class="page hidden">
+        <div class="page-title"><div><div class="eyebrow">DIAGNOSTICS / LOGS</div><h1>读懂服务现场<span class="title-dot">.</span></h1><p>只读日志尾部。密钥字段脱敏，不提供任意路径或 shell 执行。</p></div><button id="pauseLogs" class="secondary">暂停刷新</button></div>
+        <article class="card log-card"><div class="log-toolbar"><select id="logSource"><option value="service">动捕服务 · service.log</option><option value="http_origin">源站请求 · http_origin.jsonl</option><option value="supervisor">进程监督 · supervisor.log</option><option value="admin">管理员 · admin.log</option></select><input id="logQuery" placeholder="筛选日志，例如 x-rio-seq、seq、request_rejected…" aria-label="搜索日志"><select id="logLines"><option value="250">最近 250 行</option><option value="500">最近 500 行</option><option value="1000">最近 1000 行</option></select><button id="downloadLog" class="secondary">下载当前片段</button></div><div class="log-meta" id="logMeta">等待日志</div><pre id="logContent" class="log-output" tabindex="0"></pre><div class="log-footer">源站结构化日志记录UTC毫秒、请求ID、seq、RIO关联ID与限流状态。仅搜索末尾行；不含Cookie、密码或图片body。</div></article>
+      </section>
+      <section id="page-benchmarks" class="page hidden">
+        <div class="page-title"><div><div class="eyebrow">PERFORMANCE / ARCHIVE</div><h1>基准，不是实时值<span class="title-dot">.</span></h1><p>已保存的受控测速结果，供复现与对照。</p></div><span class="pill neutral">HISTORICAL ONLY</span></div>
+        <div class="notice warm"><span>ⓘ</span><div><strong>这些数字不代表端侧当前体验</strong><p>测速素材和输入尺寸以记录为准。请将客户端采集、编码、网络、服务、Blender 应用分别计时。</p></div></div><div id="benchmarkCards" class="benchmark-grid"></div>
+      </section>
+      <section id="page-live" class="page hidden">
+        <div class="page-title"><div><div class="eyebrow">LIVE CAPTURE / HISTORY</div><h1>每次动捕，留下可回看的现场<span class="title-dot">.</span></h1><p>来自推理服务真实成功请求的图片抽样，按会话和重置段归档。</p></div><span id="liveCaptureBadge" class="pill neutral">等待采集</span></div>
+        <div class="notice warm"><span>ⓘ</span><div><strong>这是后续线上图片历史，不是演示样本</strong><p>默认最多每秒抽1帧，有界异步写盘。保留24小时 / 最多3600条 / 2GiB，先到先清理；不是全帧录像。图片可能含用户画面，仅管理员可见，需显式启用历史采集。</p></div></div>
+        <div class="card live-status-card"><div class="visual-toolbar"><div><h2>归档状态</h2><p id="liveCaptureStatus" class="muted">等待采集器状态</p></div><div class="visual-actions"><select id="liveStream" aria-label="筛选会话"><option value="">全部会话</option></select><button id="liveRefresh" class="secondary">刷新最新</button><button id="livePause" class="secondary">暂停自动刷新</button></div></div><p id="liveCaptureDetail" class="subtle-note"></p></div>
+        <div id="liveEmpty" class="card empty">还没有线上图片记录。端侧开始动捕后，新的成功帧会自动出现在这里。</div>
+        <div id="liveRecords" class="live-record-grid"></div>
+        <div class="live-pagination"><button id="liveOlder" class="secondary hidden">加载更早记录</button></div>
+        <div id="liveDetail" class="hidden"><div class="card live-status-card"><div class="visual-toolbar"><div><h2 id="liveDetailTitle">选中帧</h2><p id="liveDetailMeta" class="muted"></p></div><button id="liveDetailClose" class="secondary">收起</button></div><p id="liveTiming" class="subtle-note"></p></div><div id="liveDetailGrid" class="visual-grid"></div></div>
+      </section>
+      <section id="page-visuals" class="page hidden">
+        <div class="page-title"><div><div class="eyebrow">VISION / INSPECTION</div><h1>看见模型看到的<span class="title-dot">.</span></h1><p>原图、分割、裁剪与模型输入，一帧一帧对照。</p></div><span class="pill neutral">OFFLINE SAMPLES</span></div>
+        <div class="notice warm"><span>ⓘ</span><div><strong>已保存的离线诊断样本，不是实时摄像头</strong><p id="visualSourceNote">正在读取图片索引</p></div></div>
+        <div id="visualEmpty" class="card empty hidden">暂无离线诊断图片；后续实时抽样请查看线上历史，默认需显式开启。</div>
+        <div id="visualContent" class="hidden">
+          <div class="card visual-controls"><div class="visual-toolbar"><div><h2 id="visualFrameTitle">Frame 000</h2><p id="visualFrameMeta" class="muted"></p></div><div class="visual-actions"><button id="visualPrev" class="secondary" aria-label="上一抽样帧">← 上一帧</button><button id="visualPlay" class="secondary">播放抽样</button><button id="visualNext" class="secondary" aria-label="下一抽样帧">下一帧 →</button></div></div><div id="frameStrip" class="frame-strip"></div><p class="subtle-note">播放仅切换已保存的抽样帧，不是原视频帧率或实时动捕。点击图片可放大、下载。</p></div>
+          <div id="visualGrid" class="visual-grid"></div>
+          <div class="card visual-trend"><div class="card-head"><div><h2>裁剪覆盖范围</h2><p>120帧 bbox 面积 / 原图面积 · 不是分割置信度或准确率</p></div></div><div class="chart-wrap"><canvas id="bboxChart" aria-label="每帧裁剪框覆盖面积"></canvas></div></div>
+          <div class="card"><div class="card-head"><div><h2>诊断总览</h2><p>整段抽样、首帧检查与离线策略对照</p></div></div><div id="visualSummaries" class="visual-summary-grid"></div><p class="subtle-note">离线诊断与线上抽样分开显示。图像未随发布包附带；请仅使用获得授权的测试素材。</p></div>
+        </div>
+      </section>
+      <section id="page-instance" class="page hidden">
+        <div class="page-title"><div><div class="eyebrow">INSTANCE / CONFIGURATION</div><h1>清楚每一层边界<span class="title-dot">.</span></h1><p>部署信息与观测范围。此控制台不提供任何模型控制操作。</p></div></div>
+        <div class="overview-grid"><article class="card"><div class="card-head"><h2>服务实例</h2></div><dl class="details instance-details"><div><dt>API地址</dt><dd id="instanceApiUrl">等待采样</dd></div><div><dt>模型</dt><dd id="instanceModel">DINOv3 / bf16</dd></div><div><dt>Checkpoint</dt><dd id="instanceCheckpoint">加载中</dd></div><div><dt>动捕 API</dt><dd id="instanceApiPort">—</dd></div><div><dt>管理员页面</dt><dd id="instanceAdminPort">—</dd></div><div><dt>会话模式</dt><dd>单活动会话 · TTL 120 秒</dd></div><div><dt>输出</dt><dd>[J,6] local rot6d</dd></div><div><dt>输入限制</dt><dd>JPEG / PNG · 8 MiB · ≤ 2073600 像素</dd></div><div><dt>进程 PID</dt><dd id="instancePid">—</dd></div></dl></article>
+        <article class="card"><div class="card-head"><h2>监控范围</h2></div><div class="scope"><p><span class="good">✓</span> 健康检查、GPU 与主机资源、进程存活</p><p><span class="good">✓</span> 推理服务连接、日志、状态变化、历史测速</p><p><span class="good">✓</span> 本地 SQLite 历史，每分钟备份到共享盘</p><p><span class="good">✓</span> 线上成功帧抽样：原图、SAM、crop、耗时与rig标签</p><p><span class="good">✓</span> 离线诊断样本独立展示，不混入线上历史</p><p><span class="muted">—</span> 全帧实时FPS/延迟统计、当前活动rig查询未接入</p><p><span class="muted">—</span> 管理员不提供重启、kill、reset或推理操作</p></div><p class="subtle-note">线上图像最多每秒1帧，保留24小时/3600条/2GiB；资源数据包含同机其他任务。</p></article></div>
+        <div class="card instance-path"><h2>部署位置</h2><code id="deployPath"></code><p class="muted">管理员凭据来自本地 .env 或环境变量。历史可从最近备份恢复；源码不携带任何用户数据。</p></div>
+      </section>
+      <footer class="page-footer"><span>✳ CAST Operations</span><span id="footerMeta">只读 · 每 5 秒采样 · 7 天历史</span></footer>
+    </main>
+  </div>
+</div>
+<dialog id="imageDialog" class="image-dialog"><div class="image-dialog-head"><div><strong id="imageDialogTitle"></strong><p id="imageDialogSource" class="muted">离线诊断图片 · 非实时画面</p></div><div class="visual-actions"><a id="imageDownload" class="secondary" download>下载图片</a><button id="imageDialogClose" class="secondary">关闭 ✕</button></div></div><img id="imageDialogImg" alt="放大的诊断图片"></dialog>
+<script src="/assets/app.js" defer></script>
+</body>
+</html>

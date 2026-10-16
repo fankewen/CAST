@@ -15,16 +15,29 @@ video frame -> SAM 2.1 (subject box) -> crop -> causal mocap model -> poses -> a
 | [cast_live.py](cast_live.py) | Blender addon for local video capture and armature animation |
 | [cast_engine_server.py](cast_engine_server.py) | GPU inference process started by the local addon |
 | [setup_panel_scene.py](setup_panel_scene.py) | Enables the local addon in a Blender scene |
+| [rig_adapter.py](rig_adapter.py) | Shared rig export and pose application for local and remote clients |
+| [build_addon.py](build_addon.py) | Packages the local addon and its shared module into an installable ZIP |
 
 ## Loading the addon
 
-1. Copy `blender/cast_live.py` into Blender's `scripts/addons` directory, or use
-   *Preferences > Add-ons > Install from file* and pick that file.
+Live capture requires a frame-wise causal CAST checkpoint, such as one trained
+with `configs/experiment/CAST_L_dinov3_causal.yaml`. The five published offline
+checkpoints are non-causal; use your own matching causal checkpoint for this
+addon. Supply the DINO backbone and SAM2 weights separately.
+
+1. From the repository root, run
+   `python blender/build_addon.py --output /path/to/cast_live.zip`.
+   Use *Preferences > Add-ons > Install from file* and pick the ZIP.
+   Replace any previously installed single-file version of **CAST Live** first.
 2. Enable **CAST Live** in *Preferences > Add-ons*.
 3. Open the 3D viewport sidebar: press **N**, then pick the **CAST Live** tab.
 4. `2. Import Character` brings your own character in (FBX / GLB / `.blend`).
    `blender/setup_panel_scene.py` only enables the addon and gives the timeline
    room to keep counting; it changes nothing else.
+
+For development, `setup_panel_scene.py` loads the addon directly from this
+checkout. Keep `cast_live.py` and `rig_adapter.py` together. The installed ZIP
+contains both files and needs no remote service or HTTP client.
 
 The imported file must contain exactly one armature. For FBX and GLB, the addon
 selects the newly imported rig even when other armatures are already present.

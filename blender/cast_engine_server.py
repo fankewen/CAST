@@ -7,8 +7,8 @@ compile, and the 30 FPS feed.
 
 Commands (one JSON object per line, one reply line per command):
 
-``load_weights``  config, checkpoint           -> network + backbone compiled
-``load_rig``      static, bind_transforms      -> skeleton state + streaming step compiled + SAM2.1 loaded
+``load_weights``  config, checkpoint, sam_cfg, sam_ckpt -> CAST + SAM2.1 loaded
+``load_rig``      static, bind_transforms      -> skeleton state + streaming step compiled
 ``run_video``     video, fps, after_end         -> starts the uniform feed (replies at once); also swaps
                                                   the clip while one is running or paused
 ``pause_feed``                                 -> holds the feed at the current frame (no poses sent)
@@ -17,11 +17,9 @@ Commands (one JSON object per line, one reply line per command):
 ``status``                                     -> current phase
 ``shutdown``                                   -> exit
 
-The two load steps are separate on purpose: the panel has one button for
-"load weights" and another for "load model", and the second one is where the
-skeleton-only state, the streaming graph *and the segmentation model* are
-built.  Segmenting is part of every frame, so its model is loaded up front
-together with the mocap model rather than lazily on the first frame.
+The panel loads CAST and SAM together before a character is imported.
+Importing the character prepares skeleton state and compiles the streaming
+step; segmentation does not depend on the skeleton.
 """
 
 from __future__ import annotations
@@ -437,7 +435,10 @@ def dispatch(engine: StreamEngine, request: dict) -> dict:
     cmd = request.get("cmd")
     engine.log(f"COMMAND {cmd}")
     if cmd == "load_weights":
-        return engine.load_weights(request["config"], request["checkpoint"])
+        return engine.load_weights(
+            request["config"], request["checkpoint"],
+            sam_cfg=request.get("sam_cfg"), sam_ckpt=request.get("sam_ckpt"),
+        )
     if cmd == "load_rig":
         return engine.load_rig(request["static"], request.get("bind_transforms"))
     if cmd == "run_video":

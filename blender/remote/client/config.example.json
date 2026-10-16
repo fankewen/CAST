@@ -1,0 +1,21 @@
+{
+  "server_url": "http://127.0.0.1:8080",
+  "api_key": "",
+  "target_mode": "human",
+  "fps": 24,
+  "camera": 0,
+  "capture_width": 1280,
+  "capture_height": 720,
+  "square_size": 720,
+  "square_mode": "crop",
+  "jpeg_quality": 85,
+  "request_timeout_seconds": 120,
+  "pipeline_depth": 4,
+  "input_port": 5602,
+  "pose_host": "127.0.0.1",
+  "pose_port": 5599,
+  "control_port": 5601,
+  "preview_width": 640,
+  "lens_correct": false,
+  "lens_profile": null
+}

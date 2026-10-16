@@ -5,8 +5,6 @@
 .venv/
 var/
 assets/
-third_party/dinov3/
-third_party/sam2/
 __pycache__/
 *.py[cod]
 *.so
@@ -25,3 +23,11 @@ __pycache__/
 build/
 dist/
 *.egg-info/
+
+# Remote client machine state
+client/config.json
+client/active_session.json
+client/active_rig.json
+client/fbx_user_settings.json
+client/fbx_user_settings_models/
+client/camera_profile.json

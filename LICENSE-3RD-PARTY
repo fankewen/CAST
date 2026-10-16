@@ -1,5 +1,13 @@
 Third-party licenses and notices
 
+External DINOv3 and SAM2
+-----------------------
+DINOv3 and SAM2 source repositories and model weights are obtained separately
+using the main repository installation instructions. Their own licenses and
+notices apply; they are not covered by the CAST MIT license.
+DINOv3: https://github.com/facebookresearch/dinov3
+SAM2: https://github.com/facebookresearch/sam2
+
 MoCapAnything V2
 -----------------
 preprocess/zoo/third_party/ includes code from MoCapAnything V2,

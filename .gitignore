@@ -148,3 +148,6 @@ cache/
 
 demo*/
 runtime/
+
+# Local verification only; do not add test directories to repository source.
+tests/

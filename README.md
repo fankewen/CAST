@@ -2,7 +2,7 @@
 
 Pu Pang, Zhongfei Qing, Ling-Hao Chen, Songnan Li, Hua Huang, and Bo Hu.
 
-[Installation](docs/installation.md) · [Model Weights](#model-weights) · [Evaluation](#evaluation) · [Inference](#inference) · [Blender](#blender) · [Training](#training)
+[Installation](docs/installation.md) · [Model Weights](#model-weights) · [Evaluation](#evaluation) · [Inference](#inference) · [Blender](#blender) · [Remote Inference](#remote-inference) · [Training](#training)
 
 ![CAST teaser](assets/teaser.png)
 
@@ -11,7 +11,8 @@ Pu Pang, Zhongfei Qing, Ling-Hao Chen, Songnan Li, Hua Huang, and Bo Hu.
 CAST captures motion from RGB video for target skeletons with different topologies.
 It uses GRACE (Gated Rotation Alignment and CorrEction) for topology-aware
 analytic rotation correction. This repository contains the CAST training and
-inference code, together with a Blender addon for live capture.
+inference code, the CAST Live Blender addon, and a remote inference server with
+the CAST Remote Live Blender client.
 
 ## Installation
 
@@ -128,21 +129,29 @@ instead of an automatic hierarchy change or guessed coordinate system.
 
 ## Blender
 
-The CAST Live addon runs video-driven motion capture inside
-Blender. It starts a separate Python engine for CAST and SAM inference, imports
-a character from FBX, GLB, or a Blender scene, and applies predicted rotations
-to its armature.
+Install **CAST Live** using the [Blender guide](blender/README.md). Configure
+the local Python environment and model paths, load the weights, import a
+character with a single armature (FBX, GLB, or `.blend`), and run a video.
 
-Load the weights, import a character with a single armature, and run a video.
-Playback uses the armature prepared during import, including in scenes with
-other rigs. See the [Blender guide](blender/README.md) for installation, model
-setup, and controls.
-
-For inference on a GPU server, see the [remote service guide](blender/remote/README.md).
-It provides an HTTP API, a management console, and Blender client utilities,
-using the same model and inference code as this checkout. Both live workflows
-require a matching frame-wise causal checkpoint; the five offline checkpoints
+Use a matching frame-wise causal checkpoint. The five offline checkpoints
 listed above are not live-streaming weights.
+
+## Remote Inference
+
+1. Clone the complete repository onto a Linux GPU server. Follow the
+   [server setup](blender/remote/server/README.md) to install dependencies,
+   prepare a CAST-B or CAST-L causal checkpoint, and start the API and management
+   console.
+2. Follow the [client installation guide](blender/remote/client/README.md) to
+   install **CAST Remote Live** in Blender and configure its external Python
+   environment, server URL, and API key.
+3. Import an FBX, wait for skeleton initialization, then click **Start Camera**
+   and **Start Transfer**.
+
+See the [remote documentation](blender/remote/README.md) for deployment,
+configuration, and validation, or the [HTTP API reference](blender/remote/server/docs/API.md)
+to connect another client. Use a matching causal checkpoint for the server;
+the offline weights listed above cannot be used for live streaming.
 
 ## Training
 

@@ -1,5 +1,0 @@
-torch==2.7.0
-torchvision==0.22.0
-xformers==0.0.30
-flash-attn==2.8.3
-numpy==1.26.4

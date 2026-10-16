@@ -1,0 +1,9 @@
+# Use the main repository's Python/CUDA/SAM2 environment (docs/installation.md).
+-r ../../../requirements.txt
+
+# Remote HTTP API and management console only.
+fastapi==0.115.12
+uvicorn==0.34.2
+httpx==0.28.1
+h11==0.16.0
+pydantic==2.13.5

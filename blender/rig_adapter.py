@@ -1,4 +1,4 @@
-"""Blender-only rig export and rot6d driver, shared by local and remote CAST clients.
+"""Blender-only rig export and rot6d driver, used by the local CAST Live addon.
 Run inside Blender. No torch, network, or model loading in this module.
 """
 import os

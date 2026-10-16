@@ -80,6 +80,24 @@ class PipelinedMotionClient:
             raise RuntimeError('server does not advertise compatible pipeline support')
         return data
 
+    def adopt_session(self, session_id, epoch, capacity=None):
+        """Attach to an idle initialized session and resume its actual sequence."""
+        if self.sid or self.closed:
+            raise RuntimeError('client already bound or closed')
+        self.sid = session_id
+        try:
+            status = self.status()
+            pipeline = status['pipeline']
+            if pipeline['epoch'] != epoch or pipeline['pending'] or pipeline.get('failed'):
+                raise RuntimeError('session is stale, busy or failed; initialize again')
+            if pipeline['capacity'] < self.window:
+                raise RuntimeError('server pipeline capacity is smaller than client window')
+            self.epoch, self.seq = epoch, int(pipeline['next_seq'])
+            return status
+        except BaseException:
+            self.sid = None
+            raise
+
     def submit(self,jpeg_bytes,timestamp_ms=None):
         with self.lock:
             if self.failed or not self.sid or self.closed:
@@ -87,14 +105,15 @@ class PipelinedMotionClient:
             if self.pending>=self.window:
                 raise BufferError('client window full; keep latest unsubmitted image, do not increment seq')
             seq=self.seq;self.seq+=1;self.pending+=1
-        path=f'/v1/sessions/{self.sid}/frames?seq={seq}&epoch={self.epoch}'
+        epoch = self.epoch
+        path=f'/v1/sessions/{self.sid}/frames?seq={seq}&epoch={epoch}'
         if timestamp_ms is not None:
             path+=f'&timestamp_ms={float(timestamp_ms)}'
         def send():
             try:
                 result=self._request('POST',path,jpeg_bytes,'image/jpeg')
-                if result.get('seq')!=seq:
-                    raise RuntimeError('server response sequence mismatch')
+                if result.get('seq')!=seq or result.get('epoch')!=epoch:
+                    raise RuntimeError('server response sequence or epoch mismatch')
                 return result
             except Exception:
                 with self.lock:
@@ -126,11 +145,11 @@ class PipelinedMotionClient:
     def status(self):
         return self._request('GET',f'/v1/sessions/{self.sid}/status')
 
-    def close(self):
+    def close(self, delete_session=True):
         self.closed=True
         self.pool.shutdown(wait=True)
         try:
-            if self.sid:
+            if self.sid and delete_session:
                 self._request('DELETE',f'/v1/sessions/{self.sid}')
                 self.sid=None
         finally:

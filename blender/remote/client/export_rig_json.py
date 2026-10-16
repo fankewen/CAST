@@ -5,8 +5,8 @@ from pathlib import Path
 import sys
 import numpy as np
 import bpy
-sys.path.insert(0,str(Path(__file__).resolve().parents[2]))
-from rig_adapter import build_rig_asset
+sys.path.insert(0,str(Path(__file__).resolve().parent))
+from cast_remote_live import build_rig_asset
 
 p=argparse.ArgumentParser()
 p.add_argument('--output',type=Path,required=True)

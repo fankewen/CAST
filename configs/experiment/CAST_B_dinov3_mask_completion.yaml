@@ -1,5 +1,6 @@
 # Mask-completion variant: CAST-B (DINOv3) fine-tuned with the encoder's mask
 # frame token, initialized from the step-6000 CAST_B_dinov3 checkpoint.
+# The released checkpoint is from step 3000 of this 6000-step schedule.
 data:
   max_joints: 150
   dynamic_batch_max_joints: true

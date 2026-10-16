@@ -41,12 +41,12 @@ the [model guide](docs/MODELS.md). The default DINOv3 path is
 Set `CAST_DINOV3_WEIGHTS` in `.env` to use a different path.
 
 Select CAST-B or CAST-L to match your causal checkpoint, then prepare and
-activate it. For CAST-L:
+activate it. For the released CAST-B causal checkpoint:
 
 ```bash
 python tools/prepare_checkpoint.py \
-  --model CAST-L --checkpoint /path/to/CAST_L_dinov3_causal.pt \
-  --model-id cast-l --activate
+  --model CAST-B --checkpoint /path/to/CAST_B_dinov3_causal.pt \
+  --model-id cast-b --activate
 ```
 
 `--activate` selects the model for the next API start.

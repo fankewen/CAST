@@ -8,7 +8,7 @@ from settings import REPOSITORY_ROOT, SETTINGS
 
 
 MODEL_CONFIGS = {
-    'CAST-B': REPOSITORY_ROOT/'configs/experiment/CAST_B_dinov3.yaml',
+    'CAST-B': REPOSITORY_ROOT/'configs/experiment/CAST_B_dinov3_causal.yaml',
     'CAST-L': REPOSITORY_ROOT/'configs/experiment/CAST_L_dinov3_causal.yaml',
 }
 

@@ -45,6 +45,12 @@ checkpoint for your backbone and GRACE setting and use its matching configuratio
 | CAST-B · DINOv3 | [Config](configs/experiment/CAST_B_dinov3.yaml) | [Download](https://huggingface.co/CAST-mocap/CAST/resolve/main/CAST_B_dinov3.pt) |
 | CAST-B · DINOv3 · without GRACE | [Config](configs/experiment/CAST_B_dinov3_no_grace.yaml) | [Download](https://huggingface.co/CAST-mocap/CAST/resolve/main/CAST_B_dinov3_no_grace.pt) |
 | CAST-L · DINOv3 | [Config](configs/experiment/CAST_L_dinov3.yaml) | [Download](https://huggingface.co/CAST-mocap/CAST/resolve/main/CAST_L_dinov3.pt) |
+| CAST-B · DINOv3 · causal | [Config](configs/experiment/CAST_B_dinov3_causal.yaml) | [Download](https://huggingface.co/CAST-mocap/CAST/resolve/main/CAST_B_dinov3_causal.pt) |
+| CAST-B · DINOv3 · mask completion | [Config](configs/experiment/CAST_B_dinov3_mask_completion.yaml) | [Download](https://huggingface.co/CAST-mocap/CAST/resolve/main/CAST_B_dinov3_mask_completion.pt) |
+
+Use the causal checkpoint for live streaming. The mask-completion checkpoint
+uses bidirectional attention with a learned masked-frame token and requires
+`data.image_size: 224`. Both variants are released at fine-tuning step 3000.
 
 Each CAST checkpoint also requires the corresponding pretrained DINO backbone.
 Download and configuration instructions are provided in the
@@ -144,17 +150,16 @@ the interpreter, and `RESUME_FROM_CHECKPOINT` resumes an interrupted run.
 Without it, training starts from `train.init_from_checkpoint`. Logs are appended
 to `logs/`.
 
-The five configurations listed under [Model Weights](#model-weights) are the
-training recipes for the released checkpoints.
-`configs/experiment/CAST_L_dinov3_causal.yaml` is the frame-wise causal
-fine-tune used by the live Blender engine.
-`configs/experiment/CAST_B_dinov3_mask_completion.yaml` is the mask-completion
-variant.
+Use the matching configuration under [Model Weights](#model-weights) to train
+or fine-tune each variant. For CAST-L causal fine-tuning, use
+`configs/experiment/CAST_L_dinov3_causal.yaml` and provide its initialization
+checkpoint.
 
 ## Blender
 
-Use a matching frame-wise causal checkpoint for either addon. The five offline
-checkpoints listed above are not live-streaming weights.
+Use [CAST_B_dinov3_causal.pt](https://huggingface.co/CAST-mocap/CAST/resolve/main/CAST_B_dinov3_causal.pt)
+with [CAST_B_dinov3_causal.yaml](configs/experiment/CAST_B_dinov3_causal.yaml)
+for either addon. For CAST-L, provide your own matching causal checkpoint.
 
 ### CAST Live
 

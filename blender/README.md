@@ -9,10 +9,10 @@ computer: the addon starts its inference engine from this checkout. Install
 dependencies into that external environment, then select the same interpreter
 in the panel's **Python** field.
 
-Live capture requires a frame-wise causal CAST checkpoint, such as one trained
-with `configs/experiment/CAST_L_dinov3_causal.yaml`. The five published offline
-checkpoints are non-causal; use your own matching causal checkpoint for this
-addon. Supply the DINO backbone and SAM2 weights separately.
+Download [CAST_B_dinov3_causal.pt](https://huggingface.co/CAST-mocap/CAST/resolve/main/CAST_B_dinov3_causal.pt)
+and select [CAST_B_dinov3_causal.yaml](../configs/experiment/CAST_B_dinov3_causal.yaml).
+For CAST-L, use `configs/experiment/CAST_L_dinov3_causal.yaml` with your own matching
+causal checkpoint. Supply the DINO backbone and SAM2 weights separately.
 
 From the repository root, with that environment activated, build the ZIP:
 

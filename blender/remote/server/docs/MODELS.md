@@ -7,21 +7,21 @@ attention. Select the family that matches your causal checkpoint.
 
 | Model | Configuration | Preparation argument |
 | --- | --- | --- |
-| CAST-B | [CAST_B_dinov3.yaml](../../../../configs/experiment/CAST_B_dinov3.yaml) | `--model CAST-B` |
+| CAST-B | [CAST_B_dinov3_causal.yaml](../../../../configs/experiment/CAST_B_dinov3_causal.yaml) | `--model CAST-B` |
 | CAST-L | [CAST_L_dinov3_causal.yaml](../../../../configs/experiment/CAST_L_dinov3_causal.yaml) | `--model CAST-L` |
 
 Re-run preparation with a new model ID after changing model settings.
 
-Use a checkpoint trained for causal inference. The non-causal checkpoints used
-for offline evaluation require causal fine-tuning before deployment.
+Download [CAST_B_dinov3_causal.pt](https://huggingface.co/CAST-mocap/CAST/resolve/main/CAST_B_dinov3_causal.pt)
+for CAST-B. For CAST-L, provide your own matching causal checkpoint.
 
 ```bash
 python tools/prepare_checkpoint.py \
-  --model CAST-L --checkpoint /path/to/CAST_L_dinov3_causal.pt \
-  --model-id cast-l --activate
+  --model CAST-B --checkpoint /path/to/CAST_B_dinov3_causal.pt \
+  --model-id cast-b --activate
 ```
 
-For CAST-B, use `--model CAST-B` with its matching causal checkpoint and a
+For CAST-L, use `--model CAST-L` with its matching causal checkpoint and a
 distinct model ID. Restart the API after activation to load the selected model.
 
 ## Required Assets

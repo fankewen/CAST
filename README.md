@@ -2,7 +2,7 @@
 
 Pu Pang, Zhongfei Qing, Ling-Hao Chen, Songnan Li, Hua Huang, and Bo Hu.
 
-[Installation](docs/installation.md) · [Model Weights](#model-weights) · [Evaluation](#evaluation) · [Inference](#inference) · [Blender](#blender) · [Remote Inference](#remote-inference) · [Training](#training)
+[Installation](docs/installation.md) · [Model Weights](#model-weights) · [Evaluation](#evaluation) · [Inference](#inference) · [Training](#training) · [Blender](#blender)
 
 ![CAST teaser](assets/teaser.png)
 
@@ -127,32 +127,6 @@ the source declarations, conversion matrices and rest provenance. Keep
 have one root; multiple roots or incomplete axis declarations produce an error
 instead of an automatic hierarchy change or guessed coordinate system.
 
-## Blender
-
-Install **CAST Live** using the [Blender guide](blender/README.md). Configure
-the local Python environment and model paths, load the weights, import a
-character with a single armature (FBX, GLB, or `.blend`), and run a video.
-
-Use a matching frame-wise causal checkpoint. The five offline checkpoints
-listed above are not live-streaming weights.
-
-## Remote Inference
-
-1. Clone the complete repository onto a Linux GPU server. Follow the
-   [server setup](blender/remote/server/README.md) to install dependencies,
-   prepare a CAST-B or CAST-L causal checkpoint, and start the API and management
-   console.
-2. Follow the [client installation guide](blender/remote/client/README.md) to
-   install **CAST Remote Live** in Blender and configure its external Python
-   environment, server URL, and API key.
-3. Import an FBX, wait for skeleton initialization, then click **Start Camera**
-   and **Start Transfer**.
-
-See the [remote documentation](blender/remote/README.md) for deployment,
-configuration, and validation, or the [HTTP API reference](blender/remote/server/docs/API.md)
-to connect another client. Use a matching causal checkpoint for the server;
-the offline weights listed above cannot be used for live streaming.
-
 ## Training
 
 Training reads the RGB/mask caches from
@@ -176,6 +150,33 @@ training recipes for the released checkpoints.
 fine-tune used by the live Blender engine.
 `configs/experiment/CAST_B_dinov3_mask_completion.yaml` is the mask-completion
 variant.
+
+## Blender
+
+Use a matching frame-wise causal checkpoint for either addon. The five offline
+checkpoints listed above are not live-streaming weights.
+
+### CAST Live
+
+Install **CAST Live** using the [Blender guide](blender/README.md). Configure
+the local Python environment and model paths, load the weights, import a
+character with a single armature (FBX, GLB, or `.blend`), and run a video.
+
+### CAST Remote Live
+
+1. Clone the complete repository onto a Linux GPU server. Follow the
+   [server setup](blender/remote/server/README.md) to install dependencies,
+   prepare a CAST-B or CAST-L causal checkpoint, and start the API and management
+   console.
+2. Follow the [client installation guide](blender/remote/client/README.md) to
+   install **CAST Remote Live** in Blender and configure its external Python
+   environment, server URL, and API key.
+3. Import an FBX, wait for skeleton initialization, then click **Start Camera**
+   and **Start Transfer**.
+
+See the [remote documentation](blender/remote/README.md) for deployment,
+configuration, and validation, or the [HTTP API reference](blender/remote/server/docs/API.md)
+to connect another client.
 
 ## License
 

@@ -138,17 +138,19 @@ instead of an automatic hierarchy change or guessed coordinate system.
 Training reads the RGB/mask caches from
 [Dataset Preprocessing](#dataset-preprocessing). Set their
 `data.sources.*.dataset_root`, the [DINO backbone](docs/installation.md#backbone-assets)
-paths, and `output.checkpoint_root` in the model configuration, then run:
+paths, and `output.checkpoint_root` in the model configuration. Select `model`
+and `gpus` in `scripts/train_video2motion.sh`, then run from the activated Python
+environment:
 
 ```bash
 bash scripts/train_video2motion.sh
 ```
 
-`CONFIG` selects the configuration (default
-`configs/experiment/CAST_B_dinov3.yaml`), `GPUS` the visible devices, `PYTHON_BIN`
-the interpreter, and `RESUME_FROM_CHECKPOINT` resumes an interrupted run.
-Without it, training starts from `train.init_from_checkpoint`. Logs are appended
-to `logs/`.
+The script starts one process per selected GPU. To resume an interrupted run,
+set `train.resume_from_checkpoint` in the YAML and clear
+`train.init_from_checkpoint` to `null`. Otherwise,
+`train.init_from_checkpoint` selects the initialization weights; set it to
+`null` to train from scratch. Training output is printed to the terminal.
 
 Use the matching configuration under [Model Weights](#model-weights) to train
 or fine-tune each variant. For CAST-L causal fine-tuning, use
